@@ -19,7 +19,7 @@ from skimage.transform import resize
 from skimage.io import imread, imshow, show
 from sklearn.feature_extraction import image
 
-class inria_data_generator():
+class InriaDataGenerator():
     """ Class for generating Inria Building Dataset
 
         Original dataset: Image Size = 5000x5000
