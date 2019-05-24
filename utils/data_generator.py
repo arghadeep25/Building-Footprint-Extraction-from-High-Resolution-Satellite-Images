@@ -1,12 +1,13 @@
-""" Name: Utils
-    Author: Arghadeep Mazumder
-    Version: 0.1
-    Description: 1. File for generation of various data
-                    - Inria Dataset
-                    - DSAC Dataset
-                    - CrowdAI Building Dataset
-                    - Nucleus Dataset Kaggle
-                 2.
+"""
+Name: Utils
+Author: Arghadeep Mazumder
+Version: 0.1
+Description: 1. File for generation of various data
+                - Inria Dataset
+                - DSAC Dataset
+                - CrowdAI Building Dataset
+                - Nucleus Dataset Kaggle
+             2.
 """
 import numpy as np
 import sys
