@@ -1,8 +1,12 @@
 """ Name: Utils
     Author: Arghadeep Mazumder
     Version: 0.1
-    Description: 
-
+    Description: 1. File for generation of various data
+                    - Inria Dataset
+                    - DSAC Dataset
+                    - CrowdAI Building Dataset
+                    - Nucleus Dataset Kaggle
+                 2.
 """
 import numpy as np
 import sys
@@ -15,11 +19,28 @@ from skimage.io import imread, imshow, show
 from sklearn.feature_extraction import image
 
 class inria_data_generator():
-    """Class for generation of various data
-        - Inria Dataset
-        - DSAC Dataset
-        - CrowdAI Building Dataset
-        - Nucleus Dataset Kaggle
+    """ Class for generating Inria Building Dataset
+
+        Original dataset: Image Size = 5000x5000
+        Original Dataset: Mask Size  = 5000x5000
+
+        Dataset Structure: AerialImageDataset
+                            |_ test
+                                |_ images
+                            |_ train
+                                |_images
+                                |_gt
+
+        Purpose of the class is to split the original dataset and
+        corresponding mask into 250x250 pathces so that we can upscale
+        the patches into size of 256x256 for training
+
+        Parameters::
+         - data_path: path for the train folder
+           eg: (../AerialImageDataset/train/)
+         - output_path: path to store the patches
+         - patch_size: size of the patches (default: 250)
+
     """
 
     def __init__(self, data_path, output_path, patch_size = 250):
@@ -120,4 +141,3 @@ class inria_data_generator():
         print('Number of Image patches: ',total_patches)
         print('Size of Image Patch: ',image_patches[0].shape)
         print('Size of Mask Patch: ',mask_patches[0].shape)
-        return len(image_patches)
