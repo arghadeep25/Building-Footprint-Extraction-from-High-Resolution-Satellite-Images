@@ -20,7 +20,7 @@ import numpy as np
 import os
 import sys
 
-class unet_hyperparameter():
+class HyperparameterUNet():
     """ Class for generating U-Net Hyperparameters
         Parameters: - image_size (default = 256)
                     - train_path
@@ -50,7 +50,7 @@ class unet_hyperparameter():
 
         return image_size, train_path, epochs, batch_size, train_ids
 
-class mask_rcnn_hyperparameters():
+class HyperparameterMaskRCNN():
     """ Class for generating Mask R-CNN Hyperparameters
         Parameters: -
                     -
