@@ -29,17 +29,15 @@ class HyperparameterUNet():
                     - train_ids (Number of Files in the folder)
     """
     def __init__(self,
-                image_size = 256,
                 train_path,
+                image_size = 256,
                 epochs = 10,
-                batch_size = 8,
-                train_ids):
+                batch_size = 8):
 
         self.image_size = image_size
         self.train_path = train_path
         self.epochs = epochs
         self.batch_size = batch_size
-        self.train_ids = train_ids
 
     def params(self):
         image_size = self.image_size
@@ -48,20 +46,20 @@ class HyperparameterUNet():
         batch_size = self.batch_size
 
         # Extracting the number of files in the train folder
-        image_path = os.path.join(train_path,'images/')
-        _, _, image_names = next(os.walk(image_path))
-        train_ids = len(image_names)
+        # image_path = os.path.join(train_path,'images/')
+        # _, _, image_names = next(os.walk(image_path))
+        # train_ids = len(image_names)
 
 
-        return image_size, train_path, epochs, batch_size, train_ids
+        return image_size, train_path, epochs, batch_size
 
 class HyperparameterMaskRCNN():
     """ Class for generating Mask R-CNN Hyperparameters
         Parameters: -
                     -
     """
-    def __int__(self, iamge_size):
-        self.image_size = iamge_size
+    def __int__(self, image_size):
+        self.image_size = image_size
     def params(self):
         image_size = self.image_size
         return iamge_size
