@@ -26,7 +26,7 @@ class HyperparameterUNet():
                     - train_path
                     - epochs (default = 10)
                     - batch_size = 8
-                    - train_ids
+                    - train_ids (Number of Files in the folder)
     """
     def __init__(self,
                 image_size = 256,
@@ -46,7 +46,12 @@ class HyperparameterUNet():
         train_path = self.train_path
         epochs = self.epochs
         batch_size = self.batch_size
-        train_ids = self.train_ids
+
+        # Extracting the number of files in the train folder
+        image_path = os.path.join(train_path,'images/')
+        _, _, image_names = next(os.walk(image_path))
+        train_ids = len(image_names)
+
 
         return image_size, train_path, epochs, batch_size, train_ids
 
