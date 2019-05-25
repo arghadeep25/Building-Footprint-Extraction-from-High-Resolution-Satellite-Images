@@ -13,30 +13,29 @@ import numpy as np
 from skimage.transform import resize, rotate, rescale, warp, AffineTransform
 
 class DataAugmentation():
-""" Class for data augmentation.
+    """ Class for data augmentation.
 
-    Mainly helps when the training data is small
+        Mainly helps when the training data is small
 
-    Parameters: image, mask,
-                rotation angle (default = 90)
-                zoom_range (default = 1)
-                horizontal_flip (default = False)
-                vertical_flip (default = False)
-                activate (default = False)
-"""
-                
+        Parameters: image, mask,
+                    rotation angle (default = 90)
+                    zoom_range (default = 1)
+                    horizontal_flip (default = False)
+                    vertical_flip (default = False)
+                    activate (default = False)
+    """
+
     def __init__(self, image, mask,
                 rotation = 0,
                 zoom_range = 1,
                 horizontal_flip = False,
-                vertical_flip = False
+                vertical_flip = False,
+                shear = 0,
                 activate = False):
 
         self.image = image
         self.mask = mask
         self.rotation = rotation
-        self.height_shift_range = height_shift_range
-        self.width_shift_range = width_shift_range
         self.zoom_range = zoom_range
         self.horizontal_flip = horizontal_flip
         self.vertical_flip = vertical_flip
@@ -47,7 +46,7 @@ class DataAugmentation():
         """ Rotation
         """
         self.image = rotate(self.image, self.rotation)
-        self.mask = rotate(self.image, self.rotation)
+        self.mask = rotate(self.mask, self.rotation)
         return self.image, self.mask
 
     def rescale_data(self):
@@ -91,23 +90,23 @@ class DataAugmentation():
             masks = []
             images.append(self.image)
             masks.append(self.mask)
-
+            # print('Augmentation:: Image List Size: ',len(images))
             if self.rotation != 0:
                 self.image, self.mask = self.rotate_data()
                 images.append(self.image)
                 masks.append(self.mask)
 
             if self.zoom_range != 1:
-                sefl.image, self.mask = self.rescale_data()
+                self.image, self.mask = self.rescale_data()
                 images.append(self.image)
                 masks.append(self.mask)
 
-            if self.flip_horizontal == True:
+            if self.horizontal_flip == True:
                 self.image, self.mask = self.flip_horizontal_data()
                 images.append(self.image)
                 masks.append(self.mask)
 
-            if self.flip_vertically == True:
+            if self.vertical_flip == True:
                 self.image, self.mask = self.flip_vertically_data()
                 images.append(self.image)
                 masks.append(self.mask)
@@ -116,5 +115,10 @@ class DataAugmentation():
                 self.image, self.mask = self.shear_data()
                 images.append(self.image)
                 masks.append(self.mask)
+        else:
+            images = []
+            masks = []
+            images.append(self.image)
+            masks.append(self.mask)
 
-            return images, masks
+        return images, masks
