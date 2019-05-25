@@ -18,26 +18,31 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from skimage.transform import resize
-from data_augmentation import DataAugmentation
+from .augmentation import DataAugmentation
 
 class InriaDataLoader(keras.utils.Sequence):
     """ Load the training dataset for Inria Dataset from the
         data folder and put in an array
 
-        Data structure: |_ train/
-                            |_images
-                                |_...
-                            |_gt
-                                |_...
-
         Parameters: - data_path: Loads the datapath
                     - patch_size: Format the image sizes (default: 256x256)
+                    - train_ids:
 
     """
-    def __init__(self, data_path, patch_size = 256, train_ids):
+    def __init__(self, data_path, patch_size = 256,
+                aug = False, rotation = 0,
+                zoom_range = 1, horizontal_flip = False,
+                vertical_flip = False, shear = 0):
+
         self.data_path = data_path
         self.patch_size = patch_size
-        self.train_ids - train_ids
+        self.aug= aug
+        self.rotation = rotation
+        self.zoom_range = zoom_range
+        self.horizontal_flip = horizontal_flip
+        self.vertical_flip = vertical_flip
+        self.shear = shear
+        # self.train_ids = train_ids
 
     def __load__(self, image_name, mask_name):
         """ Load an image and a mask from the data folder
@@ -63,8 +68,17 @@ class InriaDataLoader(keras.utils.Sequence):
             image_name = image_path + file
             mask_name = mask_path + file
             image, mask = self.__load__(image_name, mask_name)
-            images.append(image)
-            masks.append(mask)
+            aug = DataAugmentation(image, mask,
+                                rotation =self.rotation,
+                                zoom_range = self.zoom_range,
+                                activate = self.aug)
+            aug_images, aug_masks = aug.augment()
+            for aug_image in aug_images:
+                images.append(aug_image)
+            for aug_mask in aug_masks:
+                masks.append(aug_mask)
+            # images.append(image)
+            # masks.append(mask)
 
         return images, masks
 
@@ -72,4 +86,6 @@ class InriaDataLoader(keras.utils.Sequence):
         pass
 
     def __len__(self):
-        return int(np.ceil(len(self.train_ids)/float(self.batch_size)))
+        image_path = os.path.join(self.data_path, 'images/')
+        _, _, files = next(os.walk(image_path))
+        return int(np.ceil(len(files)/float(self.batch_size)))
