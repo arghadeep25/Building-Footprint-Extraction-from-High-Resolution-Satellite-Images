@@ -1,3 +1,4 @@
+# https://github.com/alishdipani/U-net-Pytorch/blob/master/networks.py
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -20,7 +21,7 @@ class unet(nn.Module):
 
         - De-Convolution 2: (Input Dimension = 128x128x48
                              Output Dimension = 256x256x16)
-                             
+
         - De-Convolution 3: (Input Dimension = 256x256x19
                              Output Dimnesion = 256x256x1)
 
