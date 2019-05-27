@@ -47,6 +47,7 @@ class TrainUNet():
                 epochs = 5, batch_size = 1,
                 learning_rate = 0.1, val_percent = 0.05,
                 save_model = False, activate_gpu = False):
+
         self.data_path = data_path
         self.net = net
         self.patch_size = patch_size
@@ -64,7 +65,6 @@ class TrainUNet():
         self.activate_gpu = activate_gpu
 
     def train(self):
-        # path = '../../../Datasets/dummy_Inria_data/train'
         data = InriaDataLoader(self.data_path,
                             patch_size = self.patch_size,
                             aug = self.activate_aug,
@@ -73,6 +73,7 @@ class TrainUNet():
                             horizontal_flip = self.horizontal_flip,
                             vertical_flip = self.vertical_flip,
                             shear = self.shear)
+
         images, masks = data.__getitem__()
         total_data = len(images)
         optimizer = optim.SGD(self.net.parameters(),
@@ -109,10 +110,3 @@ class TrainUNet():
         if self.save_model:
             torch.save(net.state_dict(),path + 'CP{}.pth'.format(epoch + 1))
         print('Training Successful')
-
-# def main():
-#     net = UNet(n_channels = 3, n_classes = 1)
-#     train_net(net = net)
-#
-# if __name__  == '__main__':
-#     main()
