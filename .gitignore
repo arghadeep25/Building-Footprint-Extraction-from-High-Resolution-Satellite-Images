@@ -1,2 +1,5 @@
 *.pyc
 __pycache__/
+*.h5
+*.pth
+trained_models/
