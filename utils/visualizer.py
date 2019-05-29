@@ -8,25 +8,32 @@ Description: 1. Visualizer
 import numpy as np
 import matplotlib.pyplot as plt
 
-class Visualizer():
-    """ Class for visualizing input image and corresponding
-        mask
+class InriaVisualizer():
+    """ Class for visualizing input image and corresponding mask
 
-        Parameters: image
-                    mask
+        Parameters: Image
+                    Mask
+                    Image Size (default = 256)
     """
-    def __init__(self, image, mask):
+    def __init__(self, image, mask, image_size = 256):
         self.image = image
         self.mask = mask
+        self.image_size = image_size
 
     def plot(self):
         fig = plt.figure()
+        fig.subplots_adjust(hspace = 0.4, wspace = 0.4)
 
         fig_a = fig.add_subplot(1, 2, 1)
-        a.set_title('Input Image')
+        fig_a.set_title('Input Image')
+        image = np.reshape(self.image[0]*255,
+                        (self.image_size, self.image_size))
         plt.imshow(image)
 
         fig_b = fig.add_subplot(1, 2, 2)
-        b.set_title('Output Mask')
+        fig_b.set_title('Output Mask')
+        mask = np.reshape(self.mask[0]*255,
+                        (self.image_size, self.image_size))
         plt.imshow(mask)
+
         plt.show()
