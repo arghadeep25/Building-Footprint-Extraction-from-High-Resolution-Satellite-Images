@@ -121,4 +121,7 @@ class DataAugmentation():
             images.append(self.image)
             masks.append(self.mask)
 
+        images = np.array(images)
+        masks = np.array(masks)
+
         return images, masks
