@@ -2,30 +2,31 @@
 Name: Train U-Net Model
 Author: Arghadeep Mazumder
 Version: 0.1
-Description: 1. File for generation of various data
-                - Inria Dataset
-                - DSAC Dataset
-                - CrowdAI Building Dataset
-                - Nucleus Dataset Kaggle
-             2.
+Description: Train U-Net Model
+
 """
 import os
 import sys
+import cv2
 import time
 import torch
 import numpy as np
-import torch.nn as nn
-from torch import optim
-import torch.nn.functional as F
 sys.path.append('../')
-from utils.loader import InriaDataLoader
 from models.unet import UNet
+from utils.loader import InriaDataLoader
+import keras.utils
+from keras.models import Model
+from keras.layers import *
+from keras.optimizers import *
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from keras import backend as keras
+from utils.visualizer import InriaVisualizer
 
 class TrainUNet():
     """ Class for training U-Net Model
 
-        Parameters: data_path       = train folder
-                    patch_size      = 256x256
+        Parameters: train_path       = train folder
+                    patch_size      = 256
                     activate_aug    = False
                     rotation        = 0
                     zoom_range      = 1
@@ -40,17 +41,24 @@ class TrainUNet():
                     save_model      = False
                     activate_gpu    = False
     """
-    def  __init__(self, data_path, net, patch_size = 256,
-                activate_aug = False, rotation = 0,
-                zoom_range = 1, horizontal_flip = False,
-                vertical_flip = False, shear = 0,
-                epochs = 5, batch_size = 1,
-                learning_rate = 0.1, val_percent = 0.05,
-                save_model = False, activate_gpu = False):
+    def __init__(self,
+                train_path,
+                image_size = 256,
+                activate_aug = False,
+                rotation = 0,
+                zoom_range = 1,
+                horizontal_flip = False,
+                vertical_flip = False,
+                shear = 0,
+                epochs = 10,
+                batch_size = 8,
+                learning_rate = 0.1,
+                save_model = True,
+                val_data_size = 10,
+                evaluate = True):
 
-        self.data_path = data_path
-        self.net = net
-        self.patch_size = patch_size
+        self.train_path = train_path
+        self.image_size = image_size
         self.activate_aug = activate_aug
         self.rotation = rotation
         self.zoom_range = zoom_range
@@ -60,53 +68,76 @@ class TrainUNet():
         self.epochs = epochs
         self.batch_size = batch_size
         self.learning_rate = learning_rate
-        self.val_percent = val_percent
         self.save_model = save_model
-        self.activate_gpu = activate_gpu
+        self.val_data_size = val_data_size
+        sefl.evaluate = evaluate
 
     def train(self):
-        data = InriaDataLoader(self.data_path,
-                            patch_size = self.patch_size,
-                            aug = self.activate_aug,
-                            rotation = self.rotation,
-                            zoom_range = self.zoom_range,
-                            horizontal_flip = self.horizontal_flip,
-                            vertical_flip = self.vertical_flip,
-                            shear = self.shear)
+        print('''
+Starting Training:
 
-        images, masks = data.__getitem__()
-        total_data = len(images)
-        optimizer = optim.SGD(self.net.parameters(),
-                            lr = self.learning_rate,
-                            momentum=0.9,
-                            weight_decay=0.0005)
+    Data Path:       {}
+    Model:           {}
+    Patch Size:      {}
+    Augmentation:    {}
+    Rotation:        {}
+    Zoom Range:      {}
+    Horizontal Flip: {}
+    Vertical Flip:   {}
+    Shear:           {}
+    Epochs:          {}
+    Batch Size:      {}
+    Learning Rate:   {}
+    Validation %:    {}
+    Save Model:      {}
+    Evaluate:        {}
 
-        criterion = nn.BCELoss()
+        '''.format(str(self.train_path), str('U-Net'), self.image_size,
+            self.activate_aug, self.rotation, self.zoom_range,
+            self.horizontal_flip, self.vertical_flip, self.shear,
+            self.epochs, self.batch_size, self.learning_rate,
+            self.val_data_size, self.save_model, self.evaluate))
 
-        for epoch in range(self.epochs):
-            self.net.train()
-            epoch_loss = 0
-            print('Training')
-            for i in range(total_data):
-                image = images[i]
-                image = torch.from_numpy(image)
-                mask = masks[i]
-                mask = torch.from_numpy(mask)
+        images_path = os.path.join(self.train_path, 'images/')
+        train_ids = next(os.walk(images_path))[2]
 
-                if self.activate_gpu:
-                    image = image.cuda()
-                    mask = mask.cuda()
+        valid_ids = train_ids[:self.val_data_size]
+        train_ids = train_ids[self.val_data_size:]
 
-                mask_pred = self.net(image)
-                prob_mask_flat = mask_pred.view(-1)
-                true_mask_flat = mask.view(-1)
 
-                loss = criterion(prob_mask_flat, true_mask_flat)
-                epoch_loss += loss.item()
+        models = UNet()
+        model = models.network()
+        model.compile(optimizer = 'adam',
+                    loss = 'binary_crossentropy',
+                    metrics = ['acc'])
+        model.summary()
 
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+        train_gen = InriaDataLoader(train_ids,
+                                    self.train_path,
+                                    patch_size = self.image_size,
+                                    batch_size = self.batch_size)
+
+        valid_gen = InriaDataLoader(valid_ids,
+                                    self.train_path,
+                                    patch_size = self.image_size,
+                                    batch_size = self.batch_size)
+
+        train_steps = len(train_ids) // self.batch_size
+        valid_steps = len(valid_ids) // self.batch_size
+        print(train_steps)
+        model.fit_generator(train_gen,
+                            validation_data = valid_gen,
+                            steps_per_epoch = train_steps,
+                            validation_steps = valid_steps,
+                            epochs = self.epochs)
         if self.save_model:
-            torch.save(net.state_dict(),path + 'CP{}.pth'.format(epoch + 1))
-        print('Training Successful')
+            model.save('building_unet.h5')
+
+        keras.utils.plot_model(model, to_file = 'unet_architecture.png')
+
+        if self.evaluate:
+            image , mask = valid_gen.__getitem__(2)
+            result = model.predict(x)
+            result = result > 0.5
+            viz = InriaVisualizer(mask, result)
+            viz.plot()
