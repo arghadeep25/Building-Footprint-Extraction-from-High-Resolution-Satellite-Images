@@ -10,11 +10,12 @@ import sys
 import cv2
 import time
 import torch
+import keras.utils
 import numpy as np
 sys.path.append('../')
+from utils.iou import IoU
 from models.unet import UNet
 from utils.loader import InriaDataLoader
-import keras.utils
 from keras.models import Model
 from keras.layers import *
 from keras.optimizers import *
@@ -141,3 +142,6 @@ Starting Training:
             result = result > 0.5
             viz = InriaVisualizer(mask, result)
             viz.plot()
+
+        iou_score = IoU(target= mask, prediction=result)
+        print('IoU Score: ',iou_score)
