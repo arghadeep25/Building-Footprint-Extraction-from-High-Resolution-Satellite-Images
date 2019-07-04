@@ -17,7 +17,12 @@ import random
 import numpy as np
 import keras.utils
 from .augmentation import DataAugmentation
-from keras.preprocessing.image import ImageDataGenerator
+sys.path.append('../')
+from models.mask_rcnn import utils
+from models.mask_rcnn.config import Config
+from models.mask_rcnn import model as modellib
+from keras.preprocessing.image import ImageDataGenerator, img_to_array
+
 
 class InriaDataLoader(keras.utils.Sequence):
     """ Load the training dataset for Inria Dataset from the
@@ -59,7 +64,7 @@ class InriaDataLoader(keras.utils.Sequence):
         mask = cv2.resize(mask, (self.patch_size, self.patch_size))
         mask = mask[:, :, np.newaxis]
 
-        image = image/255.
+        image = img_to_array(image)/255.
         mask = mask/255.
 
         return image, mask
