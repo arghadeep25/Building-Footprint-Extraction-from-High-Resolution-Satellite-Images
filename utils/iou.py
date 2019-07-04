@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class IoU():
     """ IoU class computes the IoU score between the ground truth
         and the predicted mask
