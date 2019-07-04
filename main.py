@@ -3,8 +3,9 @@ import sys
 import time
 import cv2
 from utils import loader
-from models.unet import UNet
+# from models.unet import UNet
 from train.trainUNet import TrainUNet
+
 
 def main():
     # path = sys.argv[1]
@@ -20,9 +21,14 @@ def main():
     # print(len(images))
     path = sys.argv[1]
 
-    net = UNet(n_channels = 3, n_classes = 1)
-    train_unet = TrainUNet(data_path= path, net = net)
+    # net = UNet(n_channels=3, n_classes=1)
+    #######################################
+    ############  Train U-Net #############
+    #######################################
+    train_unet = TrainUNet(train_path=path)
     train_unet.train()
+
+    
 
 if __name__ == '__main__':
     main()
