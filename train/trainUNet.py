@@ -71,7 +71,7 @@ class TrainUNet():
         self.learning_rate = learning_rate
         self.save_model = save_model
         self.val_data_size = val_data_size
-        sefl.evaluate = evaluate
+        self.evaluate = evaluate
 
     def train(self):
         print('''
