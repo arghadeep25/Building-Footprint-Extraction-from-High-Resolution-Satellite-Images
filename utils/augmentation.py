@@ -8,9 +8,9 @@ Description: 1. Rotate
              4. Flip Vertically
              5. Shear
 """
-import cv2
 import numpy as np
 from skimage.transform import resize, rotate, rescale, warp, AffineTransform
+
 
 class DataAugmentation():
     """ Class for data augmentation.
@@ -63,7 +63,7 @@ class DataAugmentation():
     def flip_horizontal_data(self):
         """ Flip Horizontally
         """
-        if self.flip_horizontal == True:
+        if self.horizontal_flip == True:
             flipped_image = np.flip(self.image, 1)
             flipped_mask = np.flip(self.mask, 1)
             return flipped_image, flipped_mask
@@ -71,7 +71,7 @@ class DataAugmentation():
     def flip_vertically_data(self):
         """ Flip Vertically
         """
-        if self.flip_vertically == True:
+        if self.vertical_flip == True:
             flipped_image = np.flip(self.image, 0)
             flipped_mask = np.flip(self.mask, 0)
             return flipped_image, flipped_mask
