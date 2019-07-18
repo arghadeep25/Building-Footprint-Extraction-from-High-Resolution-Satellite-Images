@@ -9,10 +9,10 @@ Description: 1. File for generation of various data
                 - Nucleus Dataset Kaggle
              2.
 """
-import numpy as np
 import sys
 import os
 import cv2
+import numpy as np
 import pandas as pd
 from skimage.util import crop
 from skimage.transform import resize
@@ -34,7 +34,9 @@ class InriaDataGenerator():
 
         Purpose of the class is to split the original dataset and
         corresponding mask into 250x250 pathces so that we can upscale
-        the patches into size of 256x256 for training
+        the patches into size of 256x256 for training.
+
+        # Note: Run only "split_all_images" funciton.
 
         Parameters::
          - data_path: path for the train folder
@@ -50,7 +52,7 @@ class InriaDataGenerator():
         self.output_path = output_path
 
     def load_image_mask(self, image_name, mask_name):
-        """ Load an image from the folder
+        """ Load image and mask from the folder
         """
         try:
             image = cv2.imread(image_name,3)
@@ -62,7 +64,7 @@ class InriaDataGenerator():
             return
 
     def split_image(self, image_name, mask_name):
-        """ Split an image into 250x250 patches and store into
+        """ Split image and mask into 250x250 patches and store into
             an array
         """
         image, mask = self.load_image_mask(image_name, mask_name)
@@ -123,7 +125,7 @@ class InriaDataGenerator():
 
 
     def split_all_images(self):
-        """ Split all the images in the folder
+        """ Split all the images and masks in the folder
         """
         image_path = os.path.join(self.data_path, 'images/')
         mask_path = os.path.join(self.data_path, 'gt/')
