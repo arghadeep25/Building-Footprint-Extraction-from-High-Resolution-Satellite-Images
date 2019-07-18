@@ -8,8 +8,6 @@ Description: Train U-Net Model
 import os
 import sys
 import cv2
-import time
-import torch
 import keras.utils
 import numpy as np
 sys.path.append('../')
@@ -75,7 +73,7 @@ class TrainUNet():
 
     def train(self):
         print('''
-Starting Training:
+Start Training:
 
     Data Path:       {}
     Model:           {}
