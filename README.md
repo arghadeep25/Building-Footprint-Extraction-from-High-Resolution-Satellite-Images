@@ -9,8 +9,8 @@ DSAC Paper: https://arxiv.org/pdf/1803.06329.pdf
 
 # Dataset  
 Inria Building Dataset: https://project.inria.fr/aerialimagelabeling/  
-ISPRS Dataset: http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html
-SpaceNet Challenge Dataset: https://spacenetchallenge.github.io/
+ISPRS Dataset: http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html  
+SpaceNet Challenge Dataset: https://spacenetchallenge.github.io/  
 
 # Requirements  
 > OpenCV  
