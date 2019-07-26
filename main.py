@@ -19,6 +19,7 @@ Description: 1. Prepare Dataset
 import argparse
 from train.trainUNet import TrainUNet
 from train.trainFCN import TrainFCN
+from train.trainPSPNet import TrainPSPNet
 from train.trainDeepUNet import TrainDeepUNet
 from utils.generate import InriaDataGenerator
 
@@ -106,7 +107,8 @@ def main():
             train_deep_unet = TrainDeepUNet(train_path=args.patches_path)
             train_deep_unet.train()
         elif args.model == 'pspnet':
-            return
+            train_pspnet = TrainPSPNet(train_path=args.patches_path)
+            train_pspnet.train()
         elif args.model == 'dsac':
             return
         else:
