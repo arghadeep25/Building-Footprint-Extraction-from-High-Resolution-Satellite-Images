@@ -114,12 +114,14 @@ Start Training:
         train_gen = InriaDataLoader(train_ids,
                                     self.train_path,
                                     patch_size = self.image_size,
-                                    batch_size = self.batch_size)
+                                    batch_size = self.batch_size,
+                                    split_channel =True)
 
         valid_gen = InriaDataLoader(valid_ids,
                                     self.train_path,
                                     patch_size = self.image_size,
-                                    batch_size = self.batch_size)
+                                    batch_size = self.batch_size,
+                                    split_channel = True)
 
         train_steps = len(train_ids) // self.batch_size
         valid_steps = len(valid_ids) // self.batch_size
