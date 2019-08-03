@@ -46,7 +46,7 @@ class InriaDataGenerator():
 
     """
 
-    def __init__(self, data_path, output_path, patch_size = 250):
+    def __init__(self, data_path, output_path, patch_size = 384):
         self.data_path = data_path
         self.patch_size = patch_size
         self.output_path = output_path
@@ -58,7 +58,12 @@ class InriaDataGenerator():
             image = cv2.imread(image_name,3)
             mask = cv2.imread(mask_name,1)
             mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-            return image, mask
+
+            height, width, channel = image.shape
+            num_patches = height//self.patch_size
+            crop_dim = num_patches*self.patch_size
+
+            return image[0:crop_dim, 0:crop_dim], mask[0:crop_dim, 0:crop_dim]
         except:
             print('Unable to read image or mask from the source folder')
             return
