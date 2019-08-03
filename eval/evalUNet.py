@@ -1,3 +1,10 @@
+"""
+Name: Evaluate U-Net Model
+Author: Arghadeep Mazumder
+Version: 0.1
+Description: Evaluation of U-Net trained weights
+
+"""
 import os
 import cv2
 import sys
@@ -6,7 +13,16 @@ import numpy as np
 from keras.models import load_model
 from utils.loader import InriaDataLoader
 import matplotlib.pyplot as plt
+
+
 class EvalUNet():
+    """
+    Class for evaluating the trained models of U-Net
+
+    Parameters: data_path (test images path)
+                weight_path (path of trained models)
+                weight_name (Optional)
+    """
     def __init__(self, data_path, weight_path, weight_name = 'building_unet.h5'):
         self.data_path = data_path
         self.weight_path = weight_path
