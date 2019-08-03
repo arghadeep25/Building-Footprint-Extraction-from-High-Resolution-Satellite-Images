@@ -1,3 +1,10 @@
+"""
+Name: IoU
+Author: Arghadeep Mazumder
+Version: 0.1
+Description: Intersection over Union
+
+"""
 import numpy as np
 
 
