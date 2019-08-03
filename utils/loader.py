@@ -36,7 +36,7 @@ class InriaDataLoader(keras.utils.Sequence):
     def __init__(self, data_ids, data_path, patch_size = 256,
                 batch_size = 8, aug = False, rotation = 0,
                 zoom_range = 1, horizontal_flip = False,
-                vertical_flip = False, shear = 0):
+                vertical_flip = False, shear = 0, split_channel = False):
 
         self.data_path = data_path
         self.data_ids = data_ids
@@ -48,6 +48,7 @@ class InriaDataLoader(keras.utils.Sequence):
         self.horizontal_flip = horizontal_flip
         self.vertical_flip = vertical_flip
         self.shear = shear
+        self.split_channel = split_channel
 
     def __load__(self, data_name):
         """ Load an image and a mask from the data folder
@@ -57,15 +58,27 @@ class InriaDataLoader(keras.utils.Sequence):
         mask_name_path = os.path.join(self.data_path, 'gt', data_name)
 
         image = cv2.imread(image_name_path)
-        image = cv2.resize(image, (self.patch_size, self.patch_size))
 
         mask = cv2.imread(mask_name_path)
         mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-        mask = cv2.resize(mask, (self.patch_size, self.patch_size))
-        mask = mask[:, :, np.newaxis]
 
         image = img_to_array(image)/255.
         mask = mask/255.
+
+        split_mask = np.zeros((self.patch_size, self.patch_size, 2))
+
+        # Mainly for PSPNet
+        if self.split_channel == True:
+            nclasses = len(np.unique(mask))
+            for c in range(nclasses):
+                split_mask[:, :, c] = (mask == c).astype(int)
+            split_mask = cv2.resize(split_mask,
+                                    (96, 96),
+                                    interpolation=cv2.INTER_NEAREST)
+            split_mask = np.reshape(split_mask, (96*96, 2))
+            return image, split_mask
+
+        mask = mask[:, :, np.newaxis]
 
         return image, mask
 
