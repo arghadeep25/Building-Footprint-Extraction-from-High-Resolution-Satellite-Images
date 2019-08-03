@@ -12,7 +12,7 @@ import keras.utils
 import numpy as np
 sys.path.append('../')
 from utils.iou import IoU
-from models.pspnet import PSPNet
+from models.pspnet_vgg16 import PSPNet
 from utils.loader import InriaDataLoader
 from keras.models import Model
 from keras.layers import *
@@ -42,7 +42,7 @@ class TrainPSPNet():
     """
     def __init__(self,
                 train_path,
-                image_size = 256,
+                image_size = 384,
                 activate_aug = False,
                 rotation = 0,
                 zoom_range = 1,
@@ -114,12 +114,14 @@ Start Training:
         train_gen = InriaDataLoader(train_ids,
                                     self.train_path,
                                     patch_size = self.image_size,
-                                    batch_size = self.batch_size)
+                                    batch_size = self.batch_size,
+                                    split_channel =True)
 
         valid_gen = InriaDataLoader(valid_ids,
                                     self.train_path,
                                     patch_size = self.image_size,
-                                    batch_size = self.batch_size)
+                                    batch_size = self.batch_size,
+                                    split_channel = True)
 
         train_steps = len(train_ids) // self.batch_size
         valid_steps = len(valid_ids) // self.batch_size
