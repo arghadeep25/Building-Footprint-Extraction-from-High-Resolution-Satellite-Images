@@ -7,11 +7,15 @@ Description: FCN Architecture
 
 from keras.models import Model
 from keras.layers import Input
-from keras.layers.core import Lambda, Activation
+from keras.layers import Reshape
+from keras.layers import Dropout
+from keras.layers import Conv2DTranspose
+from keras.layers.core import Activation
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.merge import Add
-from keras.layers.normalization import BatchNormalization
+from keras.layers import Cropping2D
+# from keras.layers.normalization import BatchNormalization
 from keras.optimizers import Adam
 from keras import backend as K
 import tensorflow as tf
@@ -29,114 +33,248 @@ class FCN():
                     - Max Pool Strides (default = 2)
                     - Up Sample (default = 2)
     """
-    def __init__(self,num_classes = 1,
-                 input_shape = (256,256,3),
-                 lr_init = 0.0001,
-                 lr_decay=0.0005):
-        self.num_classes = num_classes
-        self.input_shape = input_shape
-        self.lr_init = lr_init
-        self.lr_decay = lr_decay
-#         self.vgg_weight_path = 'vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
-        self.vgg_weight_path = None
-
-    def Convblock(self,channel_dimension, block_no, no_of_convs) :
-      Layers = []
-      for i in range(no_of_convs) :
-
-          Conv_name = "conv"+str(block_no)+"_"+str(i+1)
-
-          # A constant kernel size of 3*3 is used for all convolutions
-          Layers.append(Convolution2D(channel_dimension,kernel_size = (3,3),padding = "same",activation = "relu",name = Conv_name))
-
-      Max_pooling_name = "pool"+str(block_no)
-
-      #Addding max pooling layer
-      Layers.append(MaxPooling2D(pool_size=(2, 2), strides=(2, 2),name = Max_pooling_name))
-
-      return Layers
-
-    def FCN_8_helper(self,image_size=256):
-      model = Sequential()
-      model.add(Permute((1,2,3),input_shape = (image_size,image_size,3)))
-
-      for l in self.Convblock(64,1,2) :
-          model.add(l)
-
-      for l in self.Convblock(128,2,2):
-          model.add(l)
-
-      for l in self.Convblock(256,3,3):
-          model.add(l)
-
-      for l in self.Convblock(512,4,3):
-          model.add(l)
-
-      for l in self.Convblock(512,5,3):
-          model.add(l)
-
-      model.add(Convolution2D(4096,kernel_size=(7,7),padding = "same",activation = "relu",name = "fc6"))
-
-      #Replacing fully connnected layers of VGG Net using convolutions
-      model.add(Convolution2D(4096,kernel_size=(1,1),padding = "same",activation = "relu",name = "fc7"))
-
-      # Gives the classifications scores for each of the 21 classes including background
-      model.add(Convolution2D(21,kernel_size=(1,1),padding="same",activation="relu",name = "score_fr"))
-
-      Conv_size = model.layers[-1].output_shape[2] #16 if image size if 512
-      #print(Conv_size)
-
-      model.add(Deconvolution2D(21,kernel_size=(4,4),strides = (2,2),padding = "valid",activation=None,name = "score2"))
-
-      # O = ((I-K+2*P)/Stride)+1
-      # O = Output dimesnion after convolution
-      # I = Input dimnesion
-      # K = kernel Size
-      # P = Padding
-
-      # I = (O-1)*Stride + K
-      Deconv_size = model.layers[-1].output_shape[2] #34 if image size is 512*512
-
-      #print(Deconv_size)
-      # 2 if image size is 512*512
-      Extra = (Deconv_size - 2*Conv_size)
-
-      #print(Extra)
-
-      #Cropping to get correct size
-      model.add(Cropping2D(cropping=((0,Extra),(0,Extra))))
-
-      return model
+    def __init__(self,
+                 classes=2,
+                 image_size=256,
+                 kernel_size=(3, 3),
+                 strides=(2, 2),
+                 pool_size=(2, 2),
+                 padding='same',
+                 activation='relu'):
+        self.classes = classes
+        self.image_size = image_size
+        self.kernel_size = kernel_size
+        self.strides = strides
+        self.pool_size = pool_size
+        self.padding = padding
+        self.activation = activation
 
     def network(self):
-      fcn_8 = self.FCN_8_helper(256)
-      #Calculating conv size after the sequential block
-      #32 if image size is 512*512
-      Conv_size = fcn_8.layers[-1].output_shape[2]
+        # inputs
+        inputs = Input((self.image_size, self.image_size, 3))
+        # filters
+        f = [64, 128, 256, 512, 4096]
+        levels = []
+        # VGG-16 Encoder
+        # Block 1
+        conv1 = Conv2D(f[0],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(inputs)
+        conv2 = Conv2D(f[0],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(conv1)
+        maxpool1 = MaxPooling2D(pool_size=(2, 2),
+                                strides=self.strides)(conv2)
+        levels.append(maxpool1)
 
-      #Conv to be applied on Pool4
-      skip_con1 = Convolution2D(1,kernel_size=(1,1),padding = "same",activation=None, name = "score_pool4")
+        # Block 2
+        conv3 = Conv2D(f[1],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(maxpool1)
+        conv4 = Conv2D(f[1],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(conv3)
+        maxpool2 = MaxPooling2D(pool_size=self.pool_size,
+                                strides=self.strides)(conv4)
+        levels.append(maxpool2)
 
-      #Addig skip connection which takes adds the output of Max pooling layer 4 to current layer
-      Summed = add(inputs = [skip_con1(fcn_8.layers[14].output),fcn_8.layers[-1].output])
+        # Block 3
+        conv5 = Conv2D(f[2],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(maxpool2)
+        conv6 = Conv2D(f[2],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(conv5)
+        conv7 = Conv2D(f[2],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(conv6)
+        maxpool3 = MaxPooling2D(pool_size=self.pool_size,
+                                strides=self.strides)(conv7)
+        levels.append(maxpool3)
 
-      #Upsampling output of first skip connection
-      x = Deconvolution2D(1,kernel_size=(4,4),strides = (2,2),padding = "valid",activation=None,name = "score4")(Summed)
-      x = Cropping2D(cropping=((0,2),(0,2)))(x)
+        # Block 4
+        conv8 = Conv2D(f[3],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(maxpool3)
+        conv9 = Conv2D(f[3],
+                       kernel_size=self.kernel_size,
+                       activation=self.activation,
+                       padding=self.padding)(conv8)
+        conv10 = Conv2D(f[3],
+                        kernel_size=self.kernel_size,
+                        activation=self.activation,
+                        padding=self.padding)(conv9)
+        maxpool4 = MaxPooling2D(pool_size=self.pool_size,
+                                strides=self.strides)(conv10)
+        levels.append(maxpool4)
 
+        # Block 5
+        conv11 = Conv2D(f[3],
+                        kernel_size=self.kernel_size,
+                        activation=self.activation,
+                        padding=self.padding)(maxpool4)
+        conv12 = Conv2D(f[3],
+                        kernel_size=self.kernel_size,
+                        activation=self.activation,
+                        padding=self.padding)(conv11)
+        conv13 = Conv2D(f[3],
+                        kernel_size=self.kernel_size,
+                        activation=self.activation,
+                        padding=self.padding)(conv12)
+        maxpool5 = MaxPooling2D(pool_size=self.pool_size,
+                                strides=self.strides)(conv13)
+        levels.append(maxpool5)
+        # --------------------------
 
-      #Conv to be applied to pool3
-      skip_con2 = Convolution2D(1,kernel_size=(1,1),padding = "same",activation=None, name = "score_pool3")
+        # conv14 = Conv2D(f[4],
+        #                (7, 7),
+        #                activation=self.activation,
+        #                padding=self.padding)(levels[4])
+        # conv15 = Conv2D(f[4],
+        #                 (1, 1),
+        #                 activation=self.activation,
+        #                 padding=self.padding)(conv14)
+        #
+        # conv_tran1 = Conv2DTranspose(self.classes,
+        #                              kernel_size=(4, 4),
+        #                              strides=(4, 4),
+        #                              use_bias=False)(conv15)
+        # conv16 = Conv2D(self.classes,
+        #                 (1, 1),
+        #                 activation=self.activation,
+        #                 padding=self.padding)(levels[3])
+        # conv_tran2 = Conv2DTranspose(self.classes,
+        #                              kernel_size=(2, 2),
+        #                              strides=(2, 2),
+        #                              use_bias=False)(conv16)
+        # conv17 = Conv2D(self.classes,
+        #                 (1, 1),
+        #                 activation=self.activation,
+        #                 padding=self.padding)(levels[2])
+        #
+        # sum1 = Add()([conv_tran2, conv17, conv_tran1])
+        #
+        # conv_tran3 = Conv2DTranspose(self.classes,
+        #                              kernel_size=(8, 8),
+        #                              strides=(8, 8),
+        #                              use_bias=False)(sum1)
+        # outputs = Activation('softmax')(conv_tran3)
+        #
+        # model = Model(inputs, outputs)
+        #
+        # return model
 
-      #Adding skip connection which takes output og Max pooling layer 3 to current layer
-      Summed = add(inputs = [skip_con2(fcn_8.layers[10].output),x])
+        # Converting connected layer to convolutional layer
+        conv14 = Conv2D(f[4],
+                        (7, 7),
+                        activation=self.activation,
+                        padding=self.padding)(levels[4])
+        drop1 = Dropout(0.5)(conv14)
+        conv15 = Conv2D(f[4],
+                        (1, 1),
+                        activation=self.activation,
+                        padding=self.padding)(drop1)
+        drop2 = Dropout(0.5)(conv15)
 
-      #Final Up convolution which restores the original image size
-      Up = Deconvolution2D(1,kernel_size=(16,16),strides = (8,8),
-                           padding = "valid",activation = None,name = "upsample")(Summed)
+        conv16 = Conv2D(self.classes,
+                        (1, 1),
+                        kernel_initializer='he_normal')(drop2)
+        conv_tran1 = Conv2DTranspose(self.classes,
+                                     kernel_size=(4, 4),
+                                     strides=self.strides,
+                                     use_bias=False)(conv16)
 
-      #Cropping the extra part obtained due to transpose convolution
-      final = Cropping2D(cropping = ((0,8),(0,8)))(Up)
+        conv17 = Conv2D(self.classes,
+                        (1, 1),
+                        kernel_initializer='he_normal')(levels[3])
+        # Cropping 1
+        out_shape1 = Model(inputs, conv_tran1).output_shape
+        out_shape1_height = out_shape1[1]
+        out_shape1_width = out_shape1[2]
+        print("Height 1",out_shape1_height)
+        print("Width 1", out_shape1_width)
 
+        out_shape2 = Model(inputs, conv17).output_shape
+        out_shape2_height = out_shape2[1]
+        out_shape2_width = out_shape2[2]
+        print("Height 2",out_shape2_height)
+        print("Width 2", out_shape2_width)
 
-      return Model(fcn_8.input, final)
+        diff1_w = abs(out_shape1_width - out_shape2_width)
+        diff1_h = abs(out_shape2_height - out_shape1_height)
+        print('Diff width',diff1_h)
+        print('Diff height', diff1_w)
+
+        if out_shape1_width > out_shape2_width:
+            crop1 = Cropping2D(cropping=((0, diff1_w), (0, diff1_w)))(conv_tran1)
+        else:
+            crop1 = Cropping2D(cropping=((0, 0), (0, diff1_w)))(conv17)
+
+        if out_shape1_height > out_shape2_height:
+            crop2 = Cropping2D(cropping=((0, diff1_h), (0, diff1_h)))(conv_tran1)
+        else:
+            crop2 = Cropping2D(cropping=((0, diff1_h), (0, 0)))(conv17)
+
+        sum1 = Add()([crop1, crop2])
+
+        conv_tran2 = Conv2DTranspose(self.classes,
+                                     kernel_size=(4, 4),
+                                     strides=self.strides,
+                                     use_bias=False)(sum1)
+        conv18 = Conv2D(self.classes,
+                        (1, 1),
+                        kernel_initializer='he_normal')(levels[2])
+
+        # Cropping 2 o1 = conv18 o2 = conv_tran2
+        out_shape3 = Model(inputs, conv18).output_shape
+        out_shape3_height = out_shape3[1]
+        out_shape3_width = out_shape3[2]
+
+        out_shape4 = Model(inputs, conv18).output_shape
+        out_shape4_height = out_shape4[1]
+        out_shape4_width = out_shape4[2]
+
+        diff2_w = abs(out_shape3_width - out_shape4_width)
+        diff2_h = abs(out_shape4_height - out_shape3_height)
+
+        if out_shape3_width > out_shape4_width:
+            crop3 = Cropping2D(cropping=((0, 0), (0, diff2_w)))(conv18)
+        else:
+            crop3 = Cropping2D(cropping=((0, 0), (0, diff2_w)))(conv_tran2)
+
+        if out_shape3_height > out_shape4_height:
+            crop4 = Cropping2D(cropping=((0, diff2_h), (0, 0)))(conv18)
+        else:
+            crop4 = Cropping2D(cropping=((0, diff2_h), (0, 0)))(conv_tran2)
+
+        sum2 = Add()([crop3, crop4])
+
+        conv_tran3 = Conv2DTranspose(self.classes,
+                                     kernel_size=(16, 16),
+                                     strides=(8, 8),
+                                     use_bias=False)(sum2)
+
+        # Reshaping Model
+        output_shape = Model(inputs, conv_tran3).output_shape
+        input_shape = Model(inputs, conv_tran3).input_shape
+
+        output_shape_height = output_shape[1]
+        output_shape_width = output_shape[2]
+        out_classes = output_shape[3]
+
+        reshape1 = Reshape((output_shape_height *
+                            output_shape_width, -1))(conv_tran3)
+
+        outputs = Activation('softmax')(reshape1)
+
+        model = Model(inputs, outputs)
+
+        return model
