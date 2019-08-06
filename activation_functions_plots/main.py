@@ -45,7 +45,9 @@ def main():
     x, z = func.function()
     y, z = func.derivative()
 
-    plot = GraphPlot(model=args.model, x_val=x, y_val=y, z_val=z)
+    plot = GraphPlot(model=args.model,
+                     save_model=args.save,
+                     x_val=x, y_val=y, z_val=z)
     plot.plot()
 
 
