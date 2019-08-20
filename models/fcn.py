@@ -19,6 +19,7 @@ from keras.layers import Cropping2D
 from keras.optimizers import Adam
 from keras import backend as K
 import tensorflow as tf
+from keras.layers import Dropout
 
 
 class FCN():
@@ -67,6 +68,7 @@ class FCN():
                        padding=self.padding)(conv1)
         maxpool1 = MaxPooling2D(pool_size=(2, 2),
                                 strides=self.strides)(conv2)
+        maxpool1 = Dropout(0.5)(maxpool1)
         levels.append(maxpool1)
 
         # Block 2
