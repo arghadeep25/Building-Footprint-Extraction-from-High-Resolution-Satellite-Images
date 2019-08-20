@@ -21,6 +21,7 @@ from train.trainUNet import TrainUNet
 from train.trainFCN import TrainFCN
 from train.trainPSPNet import TrainPSPNet
 from train.trainDeepUNet import TrainDeepUNet
+from train.trainSegNet import TrainSegNet
 from utils.generate import InriaDataGenerator
 
 
@@ -69,6 +70,7 @@ def cmd_line_parser():
                         choices=['fcn',
                                  'unet',
                                  'deep_unet',
+                                 'segnet',
                                  'pspnet',
                                  'dsac'],
                         type=str,
@@ -106,6 +108,9 @@ def main():
         elif args.model == 'deep_unet':
             train_deep_unet = TrainDeepUNet(train_path=args.patches_path)
             train_deep_unet.train()
+        elif args.model == 'segnet':
+            train_segnet = TrainSegNet(train_path=args.patches_path)
+            train_segnet.train()
         elif args.model == 'pspnet':
             train_pspnet = TrainPSPNet(train_path=args.patches_path)
             train_pspnet.train()
