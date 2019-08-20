@@ -18,9 +18,9 @@ import numpy as np
 import keras.utils
 from .augmentation import DataAugmentation
 sys.path.append('../')
-from models.mask_rcnn import utils
-from models.mask_rcnn.config import Config
-from models.mask_rcnn import model as modellib
+# from models.mask_rcnn import utils
+# from models.mask_rcnn.config import Config
+# from models.mask_rcnn import model as modellib
 from keras.preprocessing.image import ImageDataGenerator, img_to_array
 
 
@@ -73,9 +73,9 @@ class InriaDataLoader(keras.utils.Sequence):
             for c in range(nclasses):
                 split_mask[:, :, c] = (mask == c).astype(int)
             split_mask = cv2.resize(split_mask,
-                                    (96, 96),
+                                    (256, 256),
                                     interpolation=cv2.INTER_NEAREST)
-            split_mask = np.reshape(split_mask, (96*96, 2))
+            split_mask = np.reshape(split_mask, (256*256, 2))
             return image, split_mask
 
         mask = mask[:, :, np.newaxis]
