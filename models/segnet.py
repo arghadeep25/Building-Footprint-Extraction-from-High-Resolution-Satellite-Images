@@ -1,7 +1,7 @@
 from keras.models import Model
 from keras.layers import Input
 from keras.layers.core import Activation, Reshape
-from keras.layers.convolutional import Convolution2D
+from keras.layers import Conv2D
 from keras.layers.normalization import BatchNormalization
 from keras.layers import MaxPooling2D, UpSampling2D
 from .layers import MaxPoolingWithArgmax2D, MaxUnpooling2D
@@ -30,46 +30,46 @@ class SegNet:
         img_input = Input((self.image_size, self.image_size, 3))
         x = img_input
         # Encoder
-        x = Convolution2D(64, 3, 3, border_mode="same")(x)
+        x = Conv2D(64, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
         x = MaxPooling2D(pool_size=(2, 2))(x)
 
-        x = Convolution2D(128, 3, 3, border_mode="same")(x)
+        x = Conv2D(128, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
         x = MaxPooling2D(pool_size=(2, 2))(x)
 
-        x = Convolution2D(256, 3, 3, border_mode="same")(x)
+        x = Conv2D(256, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
         x = MaxPooling2D(pool_size=(2, 2))(x)
 
-        x = Convolution2D(512, 3, 3, border_mode="same")(x)
+        x = Conv2D(512, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
 
         # Decoder
-        x = Convolution2D(512, 3, 3, border_mode="same")(x)
+        x = Conv2D(512, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
 
         x = UpSampling2D(size=(2, 2))(x)
-        x = Convolution2D(256, 3, 3, border_mode="same")(x)
+        x = Conv2D(256, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
 
         x = UpSampling2D(size=(2, 2))(x)
-        x = Convolution2D(128, 3, 3, border_mode="same")(x)
+        x = Conv2D(128, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
 
         x = UpSampling2D(size=(2, 2))(x)
-        x = Convolution2D(64, 3, 3, border_mode="same")(x)
+        x = Conv2D(64, self.kernel_size, border_mode="same")(x)
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
 
-        x = Convolution2D(2, 1, 1, border_mode="valid")(x)
+        x = Conv2D(2, 1, 1, border_mode="valid")(x)
         x = Reshape((self.image_size*self.image_size, 2))(x)
         x = Activation("softmax")(x)
         model = Model(img_input, x)
