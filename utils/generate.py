@@ -46,7 +46,7 @@ class InriaDataGenerator():
 
     """
 
-    def __init__(self, data_path, output_path, patch_size = 384):
+    def __init__(self, data_path, output_path, patch_size = 256):
         self.data_path = data_path
         self.patch_size = patch_size
         self.output_path = output_path
