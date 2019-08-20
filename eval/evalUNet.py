@@ -23,7 +23,10 @@ class EvalUNet():
                 weight_path (path of trained models)
                 weight_name (Optional)
     """
-    def __init__(self, data_path, weight_path, weight_name = 'building_unet.h5'):
+    def __init__(self,
+                 data_path,
+                 weight_path='/media/arghadeep25/Arghadeep/TU Berlin/8 Thesis/Code/Segmentation/trained_models', 
+                 weight_name = 'building_unet.h5'):
         self.data_path = data_path
         self.weight_path = weight_path
         self.weight_name = weight_name
