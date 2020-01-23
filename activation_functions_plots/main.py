@@ -2,6 +2,8 @@ from tanh import TanH
 from step import Step
 from relu import ReLU
 from sigmoid import Sigmoid
+from linear import Linear
+from leaky_relu import LeakyRelu
 from plot import GraphPlot
 import argparse
 import numpy as np
@@ -18,7 +20,9 @@ def cmd_line_parser():
                         default=False)
     parser.add_argument('-m', '--model',
                          help='Select Model',
-                         choices=['relu', 'tanh', 'sigmoid', 'step'],
+                         choices=['linear', 'relu',
+                                  'tanh', 'sigmoid',
+                                  'step', 'leaky'],
                          type=str,
                          default=None)
     parser.add_argument('-s', '--save',
@@ -39,6 +43,10 @@ def main():
         func = TanH()
     elif args.model == 'sigmoid':
         func = Sigmoid()
+    elif args.model == 'linear':
+        func = Linear()
+    elif args.model == 'leaky':
+        func = LeakyRelu()
     else:
         print('Invalid model!!! Please see help...')
 
