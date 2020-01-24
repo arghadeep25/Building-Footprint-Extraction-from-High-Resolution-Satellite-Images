@@ -1,16 +1,16 @@
 """
-Name: Deep U-Net Model
+Name: Deep Residual U-Net Model
 Author: Arghadeep Mazumder
 Version: 0.1
-Description: Deep U-Net Architecture
+Description: Deep Residual U-Net Architecture
 """
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.layers import BatchNormalization, Activation, Conv2D, \
                          UpSampling2D, Concatenate, Input, Add
 
 
 class DeepUNet():
-    """ Deep U-Net Model
+    """ Deep Residual U-Net Model
 
         Parameters: - Image Size (default = 256)
                     - Kernel Size (default = (3, 3))
@@ -28,7 +28,8 @@ class DeepUNet():
                  pool_size=2,
                  strides=1,
                  max_pool_strides=2,
-                 up_sample=2):
+                 up_sample=2,
+                 pre_trained=False):
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.padding = padding
@@ -37,6 +38,7 @@ class DeepUNet():
         self.strides = strides
         self.max_pool_strides = max_pool_strides
         self.up_sample = up_sample
+        self.pre_trained = pre_trained
 
     def network(self):
         # filters
@@ -262,4 +264,7 @@ class DeepUNet():
                          padding="same",
                          activation="sigmoid")(sum9)
         model = Model(inputs, outputs)
+
+        if self.pre_trained is True:
+            model = load_model('../trained_models/deepunet_inria.h5')
         return model
