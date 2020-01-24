@@ -15,7 +15,8 @@ class SegNet:
                  pool_size = 2,
                  strides = 1,
                  max_pool_strides = 2,
-                 up_sample = 2):
+                 up_sample = 2,
+                 pre_trained = False):
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.padding = padding
@@ -24,6 +25,7 @@ class SegNet:
         self.strides = strides
         self.max_pool_strides = max_pool_strides
         self.up_sample = up_sample
+        self.pre_trained = pre_trained
 
     def network(self):
 
@@ -205,5 +207,8 @@ class SegNet:
         x = Reshape((self.image_size*self.image_size, 2))(x)
         x = Activation("softmax")(x)
         model = Model(img_input, x)
+
+        if self.pre_trained == True:
+            model = load_model('../trained_models/segnet_inria.h5')
 
         return model
