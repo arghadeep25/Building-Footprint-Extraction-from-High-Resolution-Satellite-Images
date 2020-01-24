@@ -5,7 +5,7 @@ Version: 0.1
 Description: FCN Architecture
 """
 
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.layers import Input
 from keras.layers import Reshape
 from keras.layers import Dropout
