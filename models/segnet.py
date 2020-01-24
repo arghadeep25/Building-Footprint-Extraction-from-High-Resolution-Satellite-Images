@@ -208,7 +208,7 @@ class SegNet:
         x = Activation("softmax")(x)
         model = Model(img_input, x)
 
-        if self.pre_trained == True:
+        if self.pre_trained is True:
             model = load_model('../trained_models/segnet_inria.h5')
 
         return model
