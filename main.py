@@ -22,7 +22,7 @@ from train.trainFCN import TrainFCN
 from train.trainPSPNet import TrainPSPNet
 from train.trainDeepUNet import TrainDeepUNet
 from train.trainSegNet import TrainSegNet
-from utils.generate import InriaDataGenerator
+from utils.generate import InriaDataGenerator, InriaTestDataGenerator
 
 
 def cmd_line_parser():
@@ -37,6 +37,19 @@ def cmd_line_parser():
                         type=bool,
                         default=False)
 
+    # Argument for converting test images into patches
+    # Image of (5000x5000) -> patches of (256x256)
+    parser.add_argument('-std', '--split_test_dataset',
+                         help = 'Test Data Preparation',
+                         choices=[True,
+                                  False],
+                         type=bool,
+                         default=False)
+    # Argument for loading test images
+    parser.add_argument('-tdp', '--test_data_path',
+                         help = 'Test Data Path',
+                         type=str,
+                         default=None)
     # Argument for loading image and mask from the folder
     # Note: Check datastructure for training
     parser.add_argument('-imp', '--image_mask_path',
@@ -82,7 +95,7 @@ def cmd_line_parser():
 def main():
     args = cmd_line_parser()
 
-    # Dataset Preparation (from image to patch)
+    # Train Dataset Preparation (from image to patch)
     # Note: To prepare the dataset pass the arguments
     #  1. -sd True
     #  2. -imp [ORIGINAL_MASK_IMAGE_PATH]
@@ -90,9 +103,21 @@ def main():
         if args.image_mask_path is None:
             print('Please specify the path...')
         data_generator = InriaDataGenerator(data_path=args.image_mask_path,
-                                            output_path=args.output_directory)
+                                            output_path=args.output_directory,
+                                            patch_size = 384)
         data_generator.split_all_images()
 
+    # Test Dataset Preparation (from image to patch)
+    # Note: To prepare the dataset pass the arguments
+    #  1. -std True
+    #  2. -tdp [ORIGINAL_IMAGE_PATH]
+    if args.split_test_dataset is True:
+        if args.test_data_path is None:
+            print('Please specify the path...')
+        data_generator = InriaTestDataGenerator(data_path=args.test_data_path,
+                                                output_path=args.output_directory,
+                                                patch_size=256)
+        data_generator.split_all_images()
     # Training
     # Note: For training pass the arguments
     #  1. -t True
