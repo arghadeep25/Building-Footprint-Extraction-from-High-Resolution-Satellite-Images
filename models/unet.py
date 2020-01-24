@@ -4,7 +4,7 @@ Author: Arghadeep Mazumder
 Version: 0.1
 Description: U-Net Architecture
 """
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.layers import Conv2D, Input, MaxPool2D, UpSampling2D, Concatenate
 
 class UNet():
@@ -27,7 +27,8 @@ class UNet():
                 pool_size = 2,
                 strides = 1,
                 max_pool_strides = 2,
-                up_sample = 2):
+                up_sample = 2,
+                pre_trained = False):
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.padding = padding
@@ -36,6 +37,9 @@ class UNet():
         self.strides = strides
         self.max_pool_strides = max_pool_strides
         self.up_sample = up_sample
+        self.pre_trained = pre_trained
+
+
     def network(self):
         f = [16, 32, 64, 128, 256]
         inputs = Input((self.image_size, self.image_size, 3))
@@ -109,7 +113,9 @@ class UNet():
                     activation= self.activation)(bn1)
 
         up_sample1 = UpSampling2D((self.up_sample, self.up_sample))(bn2)
+
         concat1 = Concatenate()([up_sample1, down8])
+
         up1 = Conv2D(f[3],
                     kernel_size = self.kernel_size,
                     padding = self.padding,
@@ -122,7 +128,9 @@ class UNet():
                     activation= self.activation)(up1)
 
         up_sample2 = UpSampling2D((self.up_sample, self.up_sample))(up2)
+
         concat2 = Concatenate()([up_sample2, down6])
+
         up3 = Conv2D(f[2],
                     kernel_size = self.kernel_size,
                     padding = self.padding,
@@ -135,7 +143,9 @@ class UNet():
                     activation= self.activation)(up3)
 
         up_sample3 = UpSampling2D((self.up_sample, self.up_sample))(up4)
+
         concat3 = Concatenate()([up_sample3, down4])
+
         up5 = Conv2D(f[1],
                     kernel_size = self.kernel_size,
                     padding = self.padding,
@@ -148,7 +158,9 @@ class UNet():
                     activation= self.activation)(up5)
 
         up_sample4 = UpSampling2D((self.up_sample, self.up_sample))(up6)
+
         concat4 = Concatenate()([up_sample4, down2])
+
         up7 = Conv2D(f[0],
                     kernel_size = self.kernel_size,
                     padding = self.padding,
@@ -163,5 +175,8 @@ class UNet():
         outputs = Conv2D(1, (1,1), padding = 'same',
                         activation= 'sigmoid')(up8)
         model = Model(inputs, outputs)
+
+        if self.pre_trained is True:
+            model = load_model('../trained_models/unet_inria.h5')
 
         return model
