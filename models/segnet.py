@@ -1,10 +1,15 @@
+"""
+Name: SegNet Model
+Author: Arghadeep Mazumder
+Version: 0.1
+Description: SegNet Architecture
+"""
 from keras.models import Model
 from keras.layers import Input
 from keras.layers.core import Activation, Reshape
 from keras.layers import Conv2D
 from keras.layers.normalization import BatchNormalization
 from keras.layers import MaxPooling2D, UpSampling2D
-from .layers import MaxPoolingWithArgmax2D, MaxUnpooling2D
 
 
 class SegNet:
