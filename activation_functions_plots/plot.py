@@ -75,5 +75,5 @@ class GraphPlot():
         plt.subplots_adjust(bottom=0.15, wspace=0.5)
         if self.save_model == True:
             filename = 'plots/' + self.model + '.png'
-            plt.savefig(filename, dpi=600)
+            plt.savefig(filename, dpi=100)
         plt.show()
