@@ -20,6 +20,7 @@ from models.segnet import SegNet
 from models.unet import UNet
 from models.deepunet import DeepUNet
 from models.pspnet import PSPNet
+from utils.plot import Plot
 from keras.models import Model, load_model
 import matplotlib.pyplot as plt
 from keras.optimizers import Adam
@@ -54,9 +55,6 @@ class Train:
         self.batch_size = batch_size
         self.learning_rate = learning_rate
         self.pre_trained = pre_trained
-
-    def plot_graph(self):
-        
 
     def train(self):
         print('''
@@ -232,3 +230,5 @@ Starting Training:
                 np.savetxt(file,
                            data,
                            fmt=['%d', '%f', '%f', '%f', '%f'])
+        plot_data = Plot(model=self.model_name)
+        plot_data.plot()
