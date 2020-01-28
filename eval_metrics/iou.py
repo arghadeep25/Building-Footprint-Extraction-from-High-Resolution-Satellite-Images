@@ -6,8 +6,9 @@ Description:
 """
 import numpy as np
 
-
 class IoU:
+    """Class for computing intersection over union
+    """
     def __init__(self, gt, predicted):
         self.gt = gt
         self.predicted = predicted

@@ -6,8 +6,9 @@ Description:
 """
 import numpy as np
 
-
 class F1:
+    """Class for computing Dice Score or F1 score
+    """
     def __init__(self, gt, predicted):
         self.gt = gt
         self.predicted = predicted

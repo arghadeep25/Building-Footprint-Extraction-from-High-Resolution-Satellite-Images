@@ -4,10 +4,11 @@ Author: Arghadeep Mazumder
 Version: 0.1
 Description:
 """
-
 import numpy as np
 
 class Accuracy:
+    """Class for computing pixel-wise accuracy
+    """
     def __init__(self, gt, predicted):
         self.gt = gt
         self.predicted = predicted
@@ -22,7 +23,7 @@ class Accuracy:
         patch_size = self.image.shape[0] #considering square patches
         if self.gt.shape[0] == self.predicted.shape[0] and \
         self.gt.shape[1] == self.predicted.shape[1]:
-        
+
             cl = np.unique(self.gt)
             n_cl = len(cl)
             pred_mask = self.extract_masks(self.predicted, cl, patch_size)
