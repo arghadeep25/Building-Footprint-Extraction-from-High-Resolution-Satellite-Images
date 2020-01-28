@@ -17,13 +17,9 @@ Description: 1. Prepare Dataset
              3. Test
 """
 import argparse
-from train.trainUNet import TrainUNet
-from train.trainFCN import TrainFCN
-from train.trainPSPNet import TrainPSPNet
-from train.trainDeepUNet import TrainDeepUNet
-from train.trainSegNet import TrainSegNet
-from utils.generate import InriaDataGenerator, InriaTestDataGenerator
-
+from train.train import Train
+from prediction.predict import Predict
+from utils.generate import InriaDataGenerator
 
 def cmd_line_parser():
     parser = argparse.ArgumentParser(description="Building Segmentation")
@@ -46,7 +42,7 @@ def cmd_line_parser():
                          type=bool,
                          default=False)
     # Argument for loading test images
-    parser.add_argument('-tdp', '--test_data_path',
+    parser.add_argument('-tedp', '--test_data_path',
                          help = 'Test Data Path',
                          type=str,
                          default=None)
@@ -63,12 +59,16 @@ def cmd_line_parser():
                         type=str,
                         default='../../Datasets/updated_dataset/')
 
-    # Argument for loading patches for training
-    parser.add_argument('-pp', '--patches_path',
+    # Argument for train data path
+    parser.add_argument('-trdp', '--train_data_path',
                         help='Image and Mask patches path for training',
                         type=str,
                         default=None)
-
+    # Argument for validation data path
+    parser.add_argument('-vdp', '--val_data_path',
+                        help='Image and Mask patches path for validation',
+                        type=str,
+                        default=None)
     # Argument for training
     parser.add_argument('-t', '--train',
                         help='Train a model',
@@ -84,8 +84,7 @@ def cmd_line_parser():
                                  'unet',
                                  'deep_unet',
                                  'segnet',
-                                 'pspnet',
-                                 'dsac'],
+                                 'pspnet'],
                         type=str,
                         default=None)
 
@@ -124,25 +123,31 @@ def main():
     #  2. -m [MODEL_NAME]
     #  3. -pp [PATCHES_PATH]
     if args.train is True:
-        if args.model == 'fcn':
-            train_fcn = TrainFCN(train_path=args.patches_path)
-            train_fcn.train()
-        elif args.model == 'unet':
-            train_unet = TrainUNet(train_path=args.patches_path)
-            train_unet.train()
-        elif args.model == 'deep_unet':
-            train_deep_unet = TrainDeepUNet(train_path=args.patches_path)
-            train_deep_unet.train()
-        elif args.model == 'segnet':
-            train_segnet = TrainSegNet(train_path=args.patches_path)
-            train_segnet.train()
-        elif args.model == 'pspnet':
-            train_pspnet = TrainPSPNet(train_path=args.patches_path)
-            train_pspnet.train()
-        elif args.model == 'dsac':
-            return
-        else:
-            print('Please select a valid model to continue...')
+        train_model = Train(train_path=args.train_data_path,
+                            validation_path=args.val_data_path,
+                            model_name=args.model,
+                            patch_size=256,
+                            activate_aug=False,
+                            pre_trained=False)
+        train_model.train()
+
+        # if args.model == 'fcn':
+        #     train_fcn = TrainFCN(train_path=args.patches_path)
+        #     train_fcn.train()
+        # elif args.model == 'unet':
+        #     train_unet = TrainUNet(train_path=args.patches_path)
+        #     train_unet.train()
+        # elif args.model == 'deep_unet':
+        #     train_deep_unet = TrainDeepUNet(train_path=args.patches_path)
+        #     train_deep_unet.train()
+        # elif args.model == 'segnet':
+        #     train_segnet = TrainSegNet(train_path=args.patches_path)
+        #     train_segnet.train()
+        # elif args.model == 'pspnet':
+        #     train_pspnet = TrainPSPNet(train_path=args.patches_path)
+        #     train_pspnet.train()
+        # else:
+        #     print('Please select a valid model to continue...')
 
 
 if __name__ == '__main__':

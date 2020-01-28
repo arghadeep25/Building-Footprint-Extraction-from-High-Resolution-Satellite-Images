@@ -229,7 +229,7 @@ class DataAugmentation():
                 images.append(noise_image)
                 masks.append(noise_mask)
 
-            if self.smooth > 0:
+            if self.sigma > 0:
                 smooth_image, smooth_gt = self.smooth()
                 images.append(smooth_image)
                 masks.append(smooth_gt)

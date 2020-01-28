@@ -25,15 +25,15 @@ class Plot:
 
     def plot(self):
         data_path = '../training_data/'
-        if self.model == 'FCN':
+        if self.model == 'fcn':
             file_name = data_path + 'fcn_train_data.txt'
-        elif self.model == 'SegNet':
+        elif self.model == 'segnet':
             file_name = data_path + 'segnet_train_data.txt'
-        elif self.model == 'UNet':
+        elif self.model == 'unet':
             file_name = data_path + 'unet_train_data.txt'
-        elif self.model == 'DeepUNet':
+        elif self.model == 'deepunet':
             file_name = data_path + 'deepunet_train_data.txt'
-        elif self.model == 'PSPNet':
+        elif self.model == 'pspnet':
             file_name = data_path + 'pspnet_train_data.txt'
         else:
             print('Check data path...')

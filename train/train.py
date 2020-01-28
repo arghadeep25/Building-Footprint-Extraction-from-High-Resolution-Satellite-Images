@@ -13,6 +13,7 @@ Description: 1. Train the models
 """
 import os
 import sys
+import numpy as np
 sys.path.append('../')
 from utils.loader import InriaDataLoader
 from models.fcn import FCN
@@ -35,7 +36,7 @@ class Train:
                  patch_size, activate_aug=True, rotation=0, sigma = 0,
                  zoom_range=1, horizontal_flip=False, vertical_flip=False,
                  shear=0, brightness=False, add_noise=False,
-                 hist_eq=False, epochs=20, batch_size=8,
+                 hist_eq=False, epochs=5, batch_size=8,
                  learning_rate=0.001, pre_trained=False):
         self.train_path = train_path
         self.validation_path = validation_path
@@ -87,31 +88,32 @@ Starting Training:
                    self.batch_size, self.learning_rate, self.pre_trained))
 
         images_path = os.path.join(self.train_path, 'images/')
+        print(self.train_path)
         train_ids = next(os.walk(images_path))[2]
 
         validation_data_path = os.path.join(self.validation_path, 'images/')
         valid_ids = next(os.walk(validation_data_path))[2]
 
-        if self.model_name == 'FCN':
+        if self.model_name == 'fcn':
             models = FCN(pre_trained=self.pre_trained)
-            mcp_path_name = '../trained_models/fcn_inria.h5'
-            training_data_file = '../training_data/fcn_train_data.txt'
-        elif self.model_name == "SegNet":
+            mcp_path_name = 'trained_models/fcn_inria.h5'
+            training_data_file = 'training_data/fcn_train_data.txt'
+        elif self.model_name == "segnet":
             models = SegNet(pre_trained=self.pre_trained)
-            mcp_path_name = '../trained_models/segnet_inria.h5'
-            training_data_file = '../training_data/segnet_train_data.txt'
-        elif self.model_name == 'UNet':
+            mcp_path_name = 'trained_models/segnet_inria.h5'
+            training_data_file = 'training_data/segnet_train_data.txt'
+        elif self.model_name == 'unet':
             models = UNet(pre_trained=self.pre_trained)
-            mcp_path_name = '../trained_models/unet_inria.h5'
-            training_data_file = '../training_data/unet_train_data.txt'
-        elif self.model_name == 'DeepUNet':
+            mcp_path_name = 'trained_models/unet_inria.h5'
+            training_data_file = 'training_data/unet_train_data.txt'
+        elif self.model_name == 'deepunet':
             models = DeepUNet(pre_trained=self.pre_trained)
-            mcp_path_name = '../trained_models/deepunet_inria.h5'
-            training_data_file = '../training_data/deepunet_train_data.txt'
-        elif self.model_name == 'PSPNet':
+            mcp_path_name = 'trained_models/deepunet_inria.h5'
+            training_data_file = 'training_data/deepunet_train_data.txt'
+        elif self.model_name == 'pspnet':
             models = PSPNet(pre_trained=self.pre_trained)
-            mcp_path_name = '../trained_models/pspnet_inria.h5'
-            training_data_file = '../training_data/pspnet_train_data.txt'
+            mcp_path_name = 'trained_models/pspnet_inria.h5'
+            training_data_file = 'training_data/pspnet_train_data.txt'
         else:
             print('Select a valid model to train...')
             return

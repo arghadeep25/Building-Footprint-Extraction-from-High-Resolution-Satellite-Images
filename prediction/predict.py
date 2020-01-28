@@ -24,11 +24,12 @@ from keras.models import Model, load_model
 from keras.preprocessing.image import img_to_array
 
 class Predict:
+    """Class for predicting results from trained models
+    """
     def __init__(self, model_name, data_path, output_path):
         self.model_name = model_name
         self.data_path = data_path
         self.output_path = output_path
-    def eval_single(self):
 
     def eval(self):
         model_dir = '../trained_models/'
