@@ -5,8 +5,7 @@ Keras
 opencv-python
 scipy
 scikit-learn
-GDAL
+GDAL==$(gdal-config --version | awk -F'[.]' '{print $1"."$2}')
 pandas
 pycocotools
 rasterio
-
