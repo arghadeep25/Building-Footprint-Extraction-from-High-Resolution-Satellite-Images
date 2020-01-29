@@ -97,23 +97,23 @@ Starting Training:
         if self.model_name == 'fcn':
             models = FCN(pre_trained=self.pre_trained)
             mcp_path_name = 'trained_models/fcn_inria.h5'
-            training_data_file = 'training_data/fcn_train_data.txt'
+            training_data_file = 'training_summary/fcn_train_data.txt'
         elif self.model_name == "segnet":
             models = SegNet(pre_trained=self.pre_trained)
             mcp_path_name = 'trained_models/segnet_inria.h5'
-            training_data_file = 'training_data/segnet_train_data.txt'
+            training_data_file = 'training_summary/segnet_train_data.txt'
         elif self.model_name == 'unet':
             models = UNet(pre_trained=self.pre_trained)
             mcp_path_name = 'trained_models/unet_inria.h5'
-            training_data_file = 'training_data/unet_train_data.txt'
+            training_data_file = 'training_summary/unet_train_data.txt'
         elif self.model_name == 'deepunet':
             models = DeepUNet(pre_trained=self.pre_trained)
             mcp_path_name = 'trained_models/deepunet_inria.h5'
-            training_data_file = 'training_data/deepunet_train_data.txt'
+            training_data_file = 'training_summary/deepunet_train_data.txt'
         elif self.model_name == 'pspnet':
             models = PSPNet(pre_trained=self.pre_trained)
             mcp_path_name = 'trained_models/pspnet_inria.h5'
-            training_data_file = 'training_data/pspnet_train_data.txt'
+            training_data_file = 'training_summary/pspnet_train_data.txt'
         else:
             print('Select a valid model to train...')
             return

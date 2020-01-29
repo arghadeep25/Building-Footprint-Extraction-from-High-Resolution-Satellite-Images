@@ -24,13 +24,16 @@ class Plot:
         self.model = model
 
     def plot(self):
-        data_path = '../training_data/'
+        data_path = 'training_summary/'
+        dstpath = 'training_plots/'
         if self.model == 'fcn':
             file_name = data_path + 'fcn_train_data.txt'
         elif self.model == 'segnet':
             file_name = data_path + 'segnet_train_data.txt'
         elif self.model == 'unet':
             file_name = data_path + 'unet_train_data.txt'
+            dstName = 'unet.png'
+            dstName = os.path.join(dstpath, dstName)
         elif self.model == 'deepunet':
             file_name = data_path + 'deepunet_train_data.txt'
         elif self.model == 'pspnet':
@@ -38,12 +41,12 @@ class Plot:
         else:
             print('Check data path...')
 
-        dirName = os.path.dirname(file_name)
-        name = os.path.basename(file_name)
-        name, _ = os.path.splitext(name)
-        name = name.split("_data")[0]
-        dstName = name + '.png'
-        dstName = os.path.join(dirName, dstName)
+        # dirName = os.path.dirname(file_name)
+        # name = os.path.basename(file_name)
+        # name, _ = os.path.splitext(name)
+        # name = name.split("_data")[0]
+        # dstName = name + '.png'
+        # dstName = os.path.join(dirName, dstName)
 
         if os.path.exists(file_name):
             test_file = open(file_name, "r")

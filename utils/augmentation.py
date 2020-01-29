@@ -80,11 +80,14 @@ class DataAugmentation():
         top = (height - z_height) // 2
         left = (width - z_width) // 2
 
-        out = zoom(image[top:top+z_height, left:left+z_width], zoom_tuple)
+        out = zoom(image[top:top+z_height,
+                         left:left+z_width],
+                   zoom_tuple).astype(np.uint8)
 
         trim_top = ((out.shape[0] - height) // 2)
         trim_left = ((out.shape[1] - width) // 2)
         out = out[trim_top:trim_top+height, trim_left:trim_left+width]
+
         return out
 
     def rescale_data(self):
@@ -95,7 +98,6 @@ class DataAugmentation():
 
         image = self.zoom_func(image)
         mask = self.zoom_func(mask)
-
         for i in range(mask.shape[0]):
             for j in range(mask.shape[1]):
                 if mask[i,j] < 200:

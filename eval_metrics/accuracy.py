@@ -20,7 +20,7 @@ class Accuracy:
         return new_mask
 
     def calculate(self):
-        patch_size = self.image.shape[0] #considering square patches
+        patch_size = self.gt.shape[0] #considering square patches
         if self.gt.shape[0] == self.predicted.shape[0] and \
         self.gt.shape[1] == self.predicted.shape[1]:
 

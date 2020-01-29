@@ -32,20 +32,20 @@ class Predict:
         self.output_path = output_path
 
     def eval(self):
-        model_dir = '../trained_models/'
-        if self.model_name == 'FCN':
+        model_dir = 'trained_models/'
+        if self.model_name == 'fcn':
             model_path = model_dir + 'fcn_inria.h5'
             model = load_model(model_path)
-        elif self.model_name == 'SegNet':
+        elif self.model_name == 'segnet':
             model_path = model_dir + 'segnet_inria.h5'
             model = load_model(model_path)
-        elif self.model_name == 'UNet':
+        elif self.model_name == 'unet':
             model_path = model_dir + 'unet_inria.h5'
             model = load_model(model_path)
-        elif self.model_name == 'DeepUNet':
+        elif self.model_name == 'deepunet':
             model_path = model_dir + 'deepunet_inria.h5'
             model = load_model(model_path)
-        elif self.model_name == 'PSPNet':
+        elif self.model_name == 'pspnet':
             model_path = model_dir + 'pspnet_inria.h5'
             model = load_model(model_path)
         else:
@@ -56,7 +56,7 @@ class Predict:
 
         _, _, files = next(os.walk(image_path))
 
-        if self.model_name == 'PSPNet':
+        if self.model_name == 'pspnet':
             result = np.zeros((384, 384, 3))
         else:
             result = np.zeros((256, 256, 3))
@@ -73,9 +73,8 @@ class Predict:
             image = cv2.imread(image_name)
             mask = cv2.imread(mask_name)
             mask = cv2.cvtColor(mask, cv2.COLOR_RGB2GRAY)
-            # cv2.imwrite(output_folder+'images/'+name+'.png',image)
             original_image = image.astype(np.uint8)
-            if self.model_name == 'PSPNet':
+            if self.model_name == 'pspnet':
                 original_image = cv2.resize(original_image, (384, 384))
                 image = cv2.resize(image, (384, 384))
                 mask = cv2.resize(mask, (384, 384))
@@ -92,38 +91,40 @@ class Predict:
             time_com = end - start
             prediction = prediction > 0.5
 
-            if self.model_name == 'SegNet':
+            if self.model_name == 'segnet':
                 prediction = prediction*255
                 prediction = prediction.reshape((256, 256, 2))
                 prediction = prediction[:,:,1]
-            elif self.model_name == 'PSPNet':
+            elif self.model_name == 'pspnet':
                 prediction = np.reshape(prediction[0]*255, (384, 384, 2))
                 prediction = prediction[:,:,1]
             else:
                 prediction = np.reshape(prediction[0]*255, (256, 256))
 
             prediction = prediction.astype(np.uint8)
-            iou_score = iou(prediction, mask)
-            print('IoU Score: ',iou_score)
-            dice_score = dice_coeff(prediction, mask)
-            print('Dice Score: ', dice_score)
-            pixel_accuracy_score = pixel_accuracy(prediction, mask)
-            print('Accuracy: ',pixel_accuracy_score)
-            print('\n')
+            iou = IoU(prediction, mask)
+            iou_score = iou.calculate()
+
+            dice = F1(prediction, mask)
+            dice_score = dice.calculate()
+
+            accuracy = Accuracy(prediction, mask)
+            pixel_accuracy_score = accuracy.calculate()
+
             time_list.append(time_com)
+
             if iou_score > 0.2:
                 avg_iou.append(iou_score)
             if dice_score > 0.2:
                 avg_dice.append(dice_score)
             if pixel_accuracy_score > 0.2:
                 avg_pixel_acc.append(pixel_accuracy_score)
+
             result[:, :, 2] = prediction
             result = result.astype(np.uint8)
-            cv2.imwrite(output_folder + 'gt/' +name +'.png', prediction)
-            overlay = cv2.addWeighted(result, 1, original_image, 1, 0)
-            cv2.imwrite(output_folder + 'images/' +name +'.png', overlay)
 
-        print('\n')
+            overlay = cv2.addWeighted(result, 1, original_image, 1, 0)
+            cv2.imwrite(self.output_path + name +'.png', overlay)
 
         min_iou = np.min(avg_iou)
         print('Min IoU: ',min_iou)
