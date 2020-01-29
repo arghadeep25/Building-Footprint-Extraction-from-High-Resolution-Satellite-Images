@@ -9,12 +9,12 @@ Description: 1. Prepare Dataset
                 - SpaceNet Challenge Dataset
              2. Train
                 - FCN
+                - SegNet
                 - UNet
                 - Deep UNet
                 - PSPNet
-                - DSAC
 
-             3. Test
+             3. Predict
 """
 import argparse
 from train.train import Train
@@ -57,7 +57,7 @@ def cmd_line_parser():
     parser.add_argument('-od', '--output_directory',
                         help='Path for daving all the patches',
                         type=str,
-                        default='../../Datasets/updated_dataset/')
+                        default=None)
 
     # Argument for train data path
     parser.add_argument('-trdp', '--train_data_path',
@@ -87,6 +87,19 @@ def cmd_line_parser():
                                  'pspnet'],
                         type=str,
                         default=None)
+    # Prediction
+    parser.add_argument('-p', '--predict',
+                        help='Prediction',
+                        choices=[True,
+                                 False],
+                        type=bool,
+                        default=False)
+
+    # Results path
+    parser.add_argument('-op', '--output_path',
+                        help='Path for saving results',
+                        type=str,
+                        default=None)
 
     return parser.parse_args()
 
@@ -95,21 +108,15 @@ def main():
     args = cmd_line_parser()
 
     # Train Dataset Preparation (from image to patch)
-    # Note: To prepare the dataset pass the arguments
-    #  1. -sd True
-    #  2. -imp [ORIGINAL_MASK_IMAGE_PATH]
     if args.split_dataset is True:
         if args.image_mask_path is None:
             print('Please specify the path...')
         data_generator = InriaDataGenerator(data_path=args.image_mask_path,
                                             output_path=args.output_directory,
-                                            patch_size = 384)
+                                            patch_size = 256)
         data_generator.split_all_images()
 
-    # Test Dataset Preparation (from image to patch)
-    # Note: To prepare the dataset pass the arguments
-    #  1. -std True
-    #  2. -tdp [ORIGINAL_IMAGE_PATH]
+    # Test Dataset Preparation (from image to patch) [without ground truth]
     if args.split_test_dataset is True:
         if args.test_data_path is None:
             print('Please specify the path...')
@@ -118,36 +125,30 @@ def main():
                                                 patch_size=256)
         data_generator.split_all_images()
     # Training
-    # Note: For training pass the arguments
-    #  1. -t True
-    #  2. -m [MODEL_NAME]
-    #  3. -pp [PATCHES_PATH]
     if args.train is True:
         train_model = Train(train_path=args.train_data_path,
                             validation_path=args.val_data_path,
                             model_name=args.model,
                             patch_size=256,
-                            activate_aug=False,
-                            pre_trained=False)
+                            activate_aug=True,
+                            pre_trained=False,
+                            epochs=1,
+                            rotation=90,
+                            sigma=0,
+                            zoom_range=1,
+                            vertical_flip=True,
+                            horizontal_flip=True,
+                            shear=0.2,
+                            brightness=True,
+                            add_noise=True,
+                            hist_eq=True,)
         train_model.train()
 
-        # if args.model == 'fcn':
-        #     train_fcn = TrainFCN(train_path=args.patches_path)
-        #     train_fcn.train()
-        # elif args.model == 'unet':
-        #     train_unet = TrainUNet(train_path=args.patches_path)
-        #     train_unet.train()
-        # elif args.model == 'deep_unet':
-        #     train_deep_unet = TrainDeepUNet(train_path=args.patches_path)
-        #     train_deep_unet.train()
-        # elif args.model == 'segnet':
-        #     train_segnet = TrainSegNet(train_path=args.patches_path)
-        #     train_segnet.train()
-        # elif args.model == 'pspnet':
-        #     train_pspnet = TrainPSPNet(train_path=args.patches_path)
-        #     train_pspnet.train()
-        # else:
-        #     print('Please select a valid model to continue...')
+    if args.predict is True:
+        predict_model = Predict(model_name=args.model,
+                                data_path=args.test_data_path,
+                                output_path=args.output_path)
+        predict_model.eval()
 
 
 if __name__ == '__main__':
