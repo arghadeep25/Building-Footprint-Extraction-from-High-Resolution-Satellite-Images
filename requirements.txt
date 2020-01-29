@@ -5,3 +5,8 @@ Keras
 opencv-python
 scipy
 scikit-learn
+GDAL
+pandas
+pycocotools
+rasterio
+
