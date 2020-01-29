@@ -41,13 +41,7 @@ class Plot:
         else:
             print('Check data path...')
 
-        # dirName = os.path.dirname(file_name)
-        # name = os.path.basename(file_name)
-        # name, _ = os.path.splitext(name)
-        # name = name.split("_data")[0]
-        # dstName = name + '.png'
-        # dstName = os.path.join(dirName, dstName)
-
+        
         if os.path.exists(file_name):
             test_file = open(file_name, "r")
             lines = test_file.readlines()
