@@ -1,16 +1,23 @@
-# Segmentation
+# Building Detection from High Resolution Satellite Images using CNN
+
+<img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample.png" width="200"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample_result.png" width="200">
 Implementation of Fully Convolutional Network, U-Net, Deep Residual U-Net, Pyramid Scene Parsing Network and Deep Structured Active Contour.
+
 ## Papers  
 Fully Convolutional Network Paper: https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf  
+SegNet Paper: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7803544
 U-Net Paper: https://arxiv.org/pdf/1505.04597.pdf  
 Deep UNet or Residual UNet Paper: https://arxiv.org/pdf/1711.10684.pdf  
 PSPNet Paper: https://arxiv.org/pdf/1612.01105.pdf  
-DSAC Paper: https://arxiv.org/pdf/1803.06329.pdf  
+
 
 # Dataset  
 Inria Building Dataset: https://project.inria.fr/aerialimagelabeling/  
 ISPRS Dataset: http://www2.isprs.org/commissions/comm3/wg4/semantic-labeling.html  
 SpaceNet Challenge Dataset: https://spacenetchallenge.github.io/  
+CrowdAI Mapping Challenge Dataset: https://www.crowdai.org/challenges/mapping-challenge
+WHU Building Dataset: http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html
+
 
 # Requirements  
 > OpenCV  
