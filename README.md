@@ -1,6 +1,9 @@
 # Building Detection from High Resolution Satellite Images using CNN
 
-<img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample.png" width="200"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample_result.png" width="200">
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample.png" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample_result.png" width="400">
+</p>
+
 Implementation of Fully Convolutional Network, U-Net, Deep Residual U-Net, Pyramid Scene Parsing Network and Deep Structured Active Contour.
 
 ## Papers  
@@ -10,6 +13,11 @@ U-Net Paper: https://arxiv.org/pdf/1505.04597.pdf
 Deep UNet or Residual UNet Paper: https://arxiv.org/pdf/1711.10684.pdf  
 PSPNet Paper: https://arxiv.org/pdf/1612.01105.pdf  
 
+## Architectures
+<p align="center">
+<img src="https://github.com/arghadeep25/Segmentation/blob/master/architecture/fcn_archi.png" width="300">   <img src="https://github.com/arghadeep25/Segmentation/blob/master/architecture/segnet_archi_mod.png" width="300">   <img src="https://github.com/arghadeep25/Segmentation/blob/master/architecture/unet_archi_mod.png" width="300"> 
+<img src="https://github.com/arghadeep25/Segmentation/blob/master/architecture/deepunet_archi_mod.png" width="300">   <img src="https://github.com/arghadeep25/Segmentation/blob/master/architecture/pspnet_archi_mod.png" width="300">
+</p>
 
 # Dataset  
 Inria Building Dataset: https://project.inria.fr/aerialimagelabeling/  
