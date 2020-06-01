@@ -85,7 +85,10 @@ python3 main.py -sd True -imp ../../Dataset/Inria_Dataset/train/ -od ../../Datas
 ```console  
 python3 main.py -pp ../../Dataset/Inria_Patches/inria_dataset_256/train/ -t True -m unet
 ```  
-
+### Training Plots
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/fcn_training.png" title="FCN" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/segnet_training.png" title="SegNet" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/unet_training.png" title="U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/deepunet_training.png" title="Deep U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/pspnet_training.png" title="PSPNet" width="400">
+</p>
 
 # To Do
 - [x] Split images into patches 250x250
