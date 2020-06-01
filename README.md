@@ -1,4 +1,4 @@
-# Building Detection from High Resolution Satellite Images using CNN
+# Building Detection from High Resolution Satellite Images
 
 <p align="center">
   <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample.png" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample_result.png" width="400">
