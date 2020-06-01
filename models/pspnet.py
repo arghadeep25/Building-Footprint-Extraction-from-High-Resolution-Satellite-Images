@@ -4,24 +4,24 @@ Author: Arghadeep Mazumder
 Version: 0.1
 Description: PSPNet Architecture with VGG16 backbone
 """
-
+import keras
+import numpy as np
+import tensorflow as tf
+from typing import List, Tuple
 from keras.models import Model
 from keras.layers import Input
+from keras import backend as K
+from keras.layers import Reshape
 from keras.layers.convolutional import Conv2D, Conv2DTranspose
 from keras.layers.pooling import MaxPooling2D, AveragePooling2D
 from keras.layers.core import Activation, Dropout, Lambda
 from keras.layers.normalization import BatchNormalization
 from keras.layers.merge import Add, Concatenate
-from keras.layers import Reshape
-from keras import backend as K
-import tensorflow as tf
-import numpy as np
-
 
 class PSPNet():
     """ Pyramid Scene Parsing Network Model
 
-        Parameters: - Image Size (default = 256)
+        Parameters: - Image Size (default = 384)
                     - Kernel Size (default = (3, 3))
                     - Padding (default = 'same')
                     - Activation (default = 'relu')
@@ -31,16 +31,16 @@ class PSPNet():
                     - Up Sample (default = 2)
                     - Pre-trained (default = False)
     """
-    def __init__(self, image_size=384,
-                 kernel_size=(3, 3),
-                 n_classes=2,
-                 padding='same',
-                 activation='relu',
-                 pool_size=2,
-                 strides=1,
-                 max_pool_strides=2,
-                 up_sample=2,
-                 pre_trained=False):
+    def __init__(self, image_size: int = 384,
+                 kernel_size: Tuple[int] = (3, 3),
+                 n_classes: int = 2,
+                 padding: str = 'same',
+                 activation: str = 'relu',
+                 pool_size: int = 2,
+                 strides: int = 1,
+                 max_pool_strides: int = 2,
+                 up_sample: int = 2,
+                 pre_trained: bool = False) -> None:
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.n_classes = n_classes
@@ -52,7 +52,7 @@ class PSPNet():
         self.up_sample = up_sample
         self.pre_trained=pre_trained
 
-    def network(self):
+    def network(self) -> keras.models.Model:
         # filters
         f = [64, 128, 256, 512, 1024, 2048]
         # pooling factors

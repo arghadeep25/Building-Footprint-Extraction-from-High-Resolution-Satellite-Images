@@ -9,17 +9,18 @@ import numpy as np
 class Accuracy:
     """Class for computing pixel-wise accuracy
     """
-    def __init__(self, gt, predicted):
+    def __init__(self, gt: np.ndarray, predicted: np.ndarray) -> None:
         self.gt = gt
         self.predicted = predicted
 
-    def extract_masks(self, mask, cl, patch_size):
+    def extract_masks(self, mask: np.ndarray,
+                      cl: int, patch_size: np.ndarray) -> np.ndarray:
         new_mask = np.zeros((len(cl),patch_size, patch_size))
         for i, c in enumerate(cl):
             new_mask[i,:,:] = mask == c
         return new_mask
 
-    def calculate(self):
+    def calculate(self) -> float:
         patch_size = self.gt.shape[0] #considering square patches
         if self.gt.shape[0] == self.predicted.shape[0] and \
         self.gt.shape[1] == self.predicted.shape[1]:

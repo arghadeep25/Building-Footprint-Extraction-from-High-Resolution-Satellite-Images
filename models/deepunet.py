@@ -4,6 +4,8 @@ Author: Arghadeep Mazumder
 Version: 0.1
 Description: Deep Residual U-Net Architecture
 """
+improt keras
+from typing import Tuple, List
 from keras.models import Model, load_model
 from keras.layers import BatchNormalization, Activation, Conv2D, \
                          UpSampling2D, Concatenate, Input, Add
@@ -21,15 +23,15 @@ class DeepUNet():
                     - Max Pool Strides (default = 2)
                     - Up Sample (default = 2)
     """
-    def __init__(self, image_size=256,
-                 kernel_size=(3,3),
-                 padding='same',
-                 activation='relu',
-                 pool_size=2,
-                 strides=1,
-                 max_pool_strides=2,
-                 up_sample=2,
-                 pre_trained=False):
+    def __init__(self, image_size: int = 256,
+                 kernel_size: Tuple[int] = (3, 3),
+                 padding: str='same',
+                 activation: str = 'relu',
+                 pool_size: int = 2,
+                 strides: int = 1,
+                 max_pool_strides: int = 2,
+                 up_sample: int = 2,
+                 pre_trained: bool = False) -> None:
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.padding = padding
@@ -40,7 +42,7 @@ class DeepUNet():
         self.up_sample = up_sample
         self.pre_trained = pre_trained
 
-    def network(self):
+    def network(self) -> keras.models.Model:
         # filters
         f = [16, 32, 64, 128, 256]
         # inputs

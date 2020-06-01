@@ -19,7 +19,7 @@ import keras.utils
 from .augmentation import DataAugmentation
 sys.path.append('../')
 from keras.preprocessing.image import ImageDataGenerator, img_to_array
-
+from typing import List, Tuple
 
 class InriaDataLoader(keras.utils.Sequence):
     """ Load the training dataset for Inria Dataset from the
@@ -30,11 +30,14 @@ class InriaDataLoader(keras.utils.Sequence):
                     - train_ids:
 
     """
-    def __init__(self, data_ids, data_path, patch_size = 256,
-                batch_size = 8, aug = True, rotation = 90,
-                zoom_range = 1.5, horizontal_flip = True, hist_eq = True,
-                vertical_flip = True, shear = 0.2, brightness = True,
-                add_noise = True, sigma = 10, split_channel = False):
+
+    def __init__(self, data_ids: List, data_path: str, patch_size: int = 256,
+                 batch_size: int = 8, aug: bool = True, rotation: int = 90,
+                 zoom_range: float = 1.5, horizontal_flip: bool = True,
+                 hist_eq: bool = True, vertical_flip: bool = True,
+                 shear: float = 0.2, brightness: float = True,
+                 add_noise: bool = True, sigma: int = 10,
+                 split_channel: bool = False) -> None:
 
         self.data_path = data_path
         self.data_ids = data_ids
@@ -56,7 +59,7 @@ class InriaDataLoader(keras.utils.Sequence):
         """ Load an image and a mask from the data folder
             Parameters: Image name
         """
-        image_name_path = os.path.join(self.data_path,'images/', data_name)
+        image_name_path = os.path.join(self.data_path, 'images/', data_name)
         mask_name_path = os.path.join(self.data_path, 'gt', data_name)
 
         image = cv2.imread(image_name_path)
@@ -75,22 +78,22 @@ class InriaDataLoader(keras.utils.Sequence):
                                     (self.patch_size, self.patch_size),
                                     interpolation=cv2.INTER_NEAREST)
             split_mask = np.reshape(split_mask,
-                                    (self.patch_size*self.patch_size, 2))
+                                    (self.patch_size * self.patch_size, 2))
             return image, split_mask
 
         mask = mask[:, :, np.newaxis]
 
         return image, mask
 
-    def __getitem__(self, index):
+    def __getitem__(self, index) -> Tuple[np.ndarray]:
         """ Get all the images and masks in the data folder
             and put into array
         """
-        if(index+1)*self.batch_size > len(self.data_ids):
-            self.batch_size = len(self.data_ids) - index*self.batch_size
+        if(index + 1) * self.batch_size > len(self.data_ids):
+            self.batch_size = len(self.data_ids) - index * self.batch_size
 
-        files_batch = self.data_ids[index * \
-            self.batch_size: (index + 1) * self.batch_size]
+        files_batch = self.data_ids[index *
+                                    self.batch_size: (index + 1) * self.batch_size]
 
         images = []
         masks = []
@@ -98,16 +101,16 @@ class InriaDataLoader(keras.utils.Sequence):
         for file in files_batch:
             image, mask = self.__load__(file)
             aug = DataAugmentation(image, mask,
-                                   rotation =self.rotation,
-                                   zoom_range = self.zoom_range,
-                                   horizontal_flip = self.horizontal_flip,
-                                   vertical_flip = self.vertical_flip,
-                                   shear = self.shear,
-                                   hist_eq = self.hist_eq,
-                                   brightness = self.brightness,
-                                   add_noise = self.add_noise,
-                                   sigma = self.sigma,
-                                   activate = self.aug)
+                                   rotation=self.rotation,
+                                   zoom_range=self.zoom_range,
+                                   horizontal_flip=self.horizontal_flip,
+                                   vertical_flip=self.vertical_flip,
+                                   shear=self.shear,
+                                   hist_eq=self.hist_eq,
+                                   brightness=self.brightness,
+                                   add_noise=self.add_noise,
+                                   sigma=self.sigma,
+                                   activate=self.aug)
 
             aug_images, aug_masks = aug.augment()
 
@@ -122,8 +125,8 @@ class InriaDataLoader(keras.utils.Sequence):
 
         return images, masks
 
-    def on_epoch_end(self):
+    def on_epoch_end(self) -> None:
         pass
 
-    def __len__(self):
-        return int(np.ceil(len(self.data_ids)/float(self.batch_size)))
+    def __len__(self) -> int:
+        return int(np.ceil(len(self.data_ids) / float(self.batch_size)))

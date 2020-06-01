@@ -9,11 +9,11 @@ import numpy as np
 class IoU:
     """Class for computing intersection over union
     """
-    def __init__(self, gt, predicted):
+    def __init__(self, gt: np.ndarray, predicted: np.ndarray):
         self.gt = gt
         self.predicted = predicted
 
-    def calculate(self):
+    def calculate(self) -> flaot:
         if self.gt.shape[0] == self.predicted.shape[0] and \
            self.gt.shape[1] == self.predicted.shape[1]:
             intersection = np.logical_and(self.gt, self.predicted)

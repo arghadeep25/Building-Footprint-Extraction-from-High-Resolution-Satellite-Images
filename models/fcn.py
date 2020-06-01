@@ -4,7 +4,8 @@ Author: Arghadeep Mazumder
 Version: 0.1
 Description: FCN Architecture
 """
-
+import keras
+from typing import Tuple
 from keras.models import Model, load_model
 from keras.layers import Input
 from keras.layers import Reshape
@@ -33,13 +34,13 @@ class FCN():
                     - Pre-Trained (default = False)
     """
     def __init__(self,
-                 image_size=256,
-                 kernel_size=(3, 3),
-                 strides=1,
-                 pool_size=2,
-                 padding='same',
-                 activation='relu',
-                 pre_trained=False):
+                 image_size: int = 256,
+                 kernel_size: Tuple[int] = (3, 3),
+                 strides: int = 1,
+                 pool_size: int = 2,
+                 padding: str = 'same',
+                 activation: str = 'relu',
+                 pre_trained: bool = False) -> None:
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.strides = strides
@@ -48,7 +49,7 @@ class FCN():
         self.activation = activation
         self.pre_trained = pre_trained
 
-    def network(self):
+    def network(self) -> keras.models.Model:
         inputs = Input((self.image_size,self.image_size,3))
         filter = [32, 64, 128]
 

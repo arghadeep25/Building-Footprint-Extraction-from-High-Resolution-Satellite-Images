@@ -32,12 +32,14 @@ import matplotlib.pyplot as plt
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 
 class Train:
-    def __init__(self, train_path, validation_path, model_name,
-                 patch_size, activate_aug=True, rotation=0, sigma = 0,
-                 zoom_range=1, horizontal_flip=False, vertical_flip=False,
-                 shear=0, brightness=False, add_noise=False,
-                 hist_eq=False, epochs=5, batch_size=8,
-                 learning_rate=0.001, pre_trained=False):
+    def __init__(self, train_path: str, validation_path: str, model_name: str,
+                 patch_size: int, activate_aug: bool = True, rotation: int = 0,
+                 sigma: int = 0, zoom_range: float = 1,
+                 horizontal_flip: bool = False, vertical_flip: bool =False,
+                 shear: float = 0, brightness: bool = False,
+                 add_noise: bool =False, hist_eq: bool = False, epochs: int =5,
+                 batch_size: int = 8, learning_rate: float =0.001,
+                 pre_trained: bool = False) -> None:
         self.train_path = train_path
         self.validation_path = validation_path
         self.model_name = model_name
@@ -57,7 +59,7 @@ class Train:
         self.learning_rate = learning_rate
         self.pre_trained = pre_trained
 
-    def train(self):
+    def train(self) -> None:
         print('''
 Starting Training:
 

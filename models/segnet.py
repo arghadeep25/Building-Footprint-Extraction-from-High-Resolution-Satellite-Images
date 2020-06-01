@@ -4,6 +4,8 @@ Author: Arghadeep Mazumder
 Version: 0.1
 Description: SegNet Architecture
 """
+import keras
+from typing import Tuple
 from keras.models import Model
 from keras.layers import Input
 from keras.layers.core import Activation, Reshape
@@ -13,15 +15,15 @@ from keras.layers import MaxPooling2D, UpSampling2D
 
 
 class SegNet:
-    def __init__(self,image_size = 256,
-                 kernel_size = (3, 3),
-                 padding = 'same',
-                 activation = 'relu',
-                 pool_size = 2,
-                 strides = 1,
-                 max_pool_strides = 2,
-                 up_sample = 2,
-                 pre_trained = False):
+    def __init__(self,image_size: int = 256,
+                 kernel_size: Tuple[int] = (3, 3),
+                 padding: str = 'same',
+                 activation: str = 'relu',
+                 pool_size: int = 2,
+                 strides: int = 1,
+                 max_pool_strides: int = 2,
+                 up_sample: int = 2,
+                 pre_trained: bool = False):
         self.image_size = image_size
         self.kernel_size = kernel_size
         self.padding = padding
@@ -32,7 +34,7 @@ class SegNet:
         self.up_sample = up_sample
         self.pre_trained = pre_trained
 
-    def network(self):
+    def network(self) -> keras.models.Model:
 
         img_input = Input((self.image_size, self.image_size, 3))
         f = [64, 128, 256, 512]

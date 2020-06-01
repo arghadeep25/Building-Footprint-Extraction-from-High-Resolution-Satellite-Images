@@ -26,12 +26,12 @@ from keras.preprocessing.image import img_to_array
 class Predict:
     """Class for predicting results from trained models
     """
-    def __init__(self, model_name, data_path, output_path):
+    def __init__(self, model_name: str, data_path: str, output_path: str) -> None:
         self.model_name = model_name
         self.data_path = data_path
         self.output_path = output_path
 
-    def eval(self):
+    def eval(self) -> None:
         model_dir = 'trained_models/'
         if self.model_name == 'fcn':
             model_path = model_dir + 'fcn_inria.h5'
