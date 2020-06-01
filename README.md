@@ -7,11 +7,11 @@
 Implementation of Fully Convolutional Network, U-Net, Deep Residual U-Net, Pyramid Scene Parsing Network and Deep Structured Active Contour.
 
 ## Papers  
-Fully Convolutional Network Paper: https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf  
-SegNet Paper: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7803544  
-U-Net Paper: https://arxiv.org/pdf/1505.04597.pdf  
-Deep UNet or Residual UNet Paper: https://arxiv.org/pdf/1711.10684.pdf  
-PSPNet Paper: https://arxiv.org/pdf/1612.01105.pdf  
+Fully Convolutional Network Paper: [Link](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)  
+SegNet Paper: [Link](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7803544)  
+U-Net Paper: [Link](https://arxiv.org/pdf/1505.04597.pdf)  
+Deep UNet or Residual UNet Paper: [Link](https://arxiv.org/pdf/1711.10684.pdf)  
+PSPNet Paper: [Link](https://arxiv.org/pdf/1612.01105.pdf)  
 
 ## Architectures
 <p align="center">
@@ -44,8 +44,24 @@ The datasets used in this project can be downloaded from the following links
 </p> 
 
 ### [WHU Building Dataset](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html):  
+#### WHU East Asia Dataset:  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/whu_east_asia/whu_east_asia.png" width="800">
+</p>  
 
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/whu_east_asia/whu_east_asia_patches.png" width="800">
+</p>  
 
+#### WHU New Zealand:  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/nzlnd/whu_nz.png" width="800">
+</p>  
+
+#### WHU Global Cities:  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/whu_sample/whu_global_cities.png" width="800">
+</p>  
 
 # Requirements  
 > OpenCV  
