@@ -23,7 +23,7 @@ PSPNet Paper: https://arxiv.org/pdf/1612.01105.pdf
 The datasets used in this project can be downloaded from the following links 
 ### [Inria Building Dataset](https://project.inria.fr/aerialimagelabeling/):  
 <p align="center">
-  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/austin3_45.png" width="100"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/austin3_45.png" width="100">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/chicago1_21.png" width="100"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/chicago1_21.png" width="100">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/vienna2_63.png" width="100"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/vienna2_63.png" width="100">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/tyrol-w2_12.png" width="100"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/tyrol-w2_12.png" width="100">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/austin3_45.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/austin3_45.png" width="120">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/chicago1_21.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/chicago1_21.png" width="120">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/images/vienna2_63.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/inria/gt/vienna2_63.png" width="120"> 
 </p>  
   
 
@@ -33,8 +33,15 @@ The datasets used in this project can be downloaded from the following links
 </p>   
 
 ### [SpaceNet Challenge Dataset](https://spacenetchallenge.github.io/):  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/spacenet/RGB-PanSharpen_AOI_3_Paris_img418.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/spacenet/RGB-PanSharpen_AOI_3_Paris_img418_gt.png" width="120">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/spacenet/RGB-PanSharpen_AOI_4_Shanghai_img945.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/spacenet/RGB-PanSharpen_AOI_4_Shanghai_img945_gt.png" width="120">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/spacenet/RGB-PanSharpen_AOI_5_Khartoum_img5.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/spacenet/RGB-PanSharpen_AOI_5_Khartoum_img5_gt.png" width="120"> 
+</p>   
+
   
 ### [CrowdAI Mapping Challenge Dataset](https://www.crowdai.org/challenges/mapping-challenge):  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/crowdai/image/1_img.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/crowdai/anno/ann_1.png" width="120">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/crowdai/gt/11.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/crowdai/image/5_img.png" width="120">  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/crowdai/anno/ann_5.png" width="120"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/crowdai/gt/55.png" width="120"> 
+</p> 
 
 ### [WHU Building Dataset](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html):  
 
