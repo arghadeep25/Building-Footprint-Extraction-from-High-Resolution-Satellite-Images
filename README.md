@@ -64,14 +64,14 @@ The datasets used in this project can be downloaded from the following links
 </p>  
 
 # Requirements  
-> [OpenCV-Python](https://pypi.org/project/opencv-python/)  
-> [Matplotlib](https://pypi.org/project/matplotlib/)  
-> [Numpy](https://pypi.org/project/numpy/)  
-> [Scikit Images](https://scikit-image.org/docs/dev/install.html)  
-> [Keras](https://pypi.org/project/Keras/)  
-> [Tensorflow](https://www.tensorflow.org/install/pip)  
-> [GDAL](https://pypi.org/project/GDAL/)  
-> [PyCOCOTools](https://pypi.org/project/pycocotools/)  
+- ['OpenCV-Python'](https://pypi.org/project/opencv-python/)  
+- [Matplotlib](https://pypi.org/project/matplotlib/)  
+- [Numpy](https://pypi.org/project/numpy/)  
+- [Scikit Images](https://scikit-image.org/docs/dev/install.html)  
+- [Keras](https://pypi.org/project/Keras/)  
+- [Tensorflow](https://www.tensorflow.org/install/pip)  
+- [GDAL](https://pypi.org/project/GDAL/)  
+- [PyCOCOTools](https://pypi.org/project/pycocotools/)  
 
 # Usage  
 ## Help  
