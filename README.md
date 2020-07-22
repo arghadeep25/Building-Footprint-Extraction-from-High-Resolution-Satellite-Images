@@ -64,11 +64,14 @@ The datasets used in this project can be downloaded from the following links
 </p>  
 
 # Requirements  
-> OpenCV  
-> Matplotlib  
-> Scikit Images  
-> Keras  
-> Tensorflow  
+> [OpenCV-Python](https://pypi.org/project/opencv-python/)  
+> [Matplotlib](https://pypi.org/project/matplotlib/)  
+> [Numpy](https://pypi.org/project/numpy/)  
+> [Scikit Images](https://scikit-image.org/docs/dev/install.html)  
+> [Keras](https://pypi.org/project/Keras/)  
+> [Tensorflow](https://www.tensorflow.org/install/pip)  
+> [GDAL](https://pypi.org/project/GDAL/)  
+> [PyCOCOTools](https://pypi.org/project/pycocotools/)  
 
 # Usage  
 ## Help  
@@ -89,18 +92,3 @@ python3 main.py -pp ../../Dataset/Inria_Patches/inria_dataset_256/train/ -t True
 <p align="center">
   <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/fcn_training.png" title="FCN" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/segnet_training.png" title="SegNet" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/unet_training.png" title="U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/deepunet_training.png" title="Deep U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/pspnet_training.png" title="PSPNet" width="400">
 </p>
-
-# To Do
-- [x] Split images into patches 250x250
-- [x] Split images into patches 500x500
-- [x] Implement FCN
-- [x] Implement UNet
-- [x] Implement Deep UNet
-- [ ] Implement PSPNet
-- [ ] Implement DSAC
-- [x] Train on small dataset
-- [ ] Train on large dataset
-- [ ] Test all the trained models
-- [ ] Plot graphs on Tensorboard
-- [ ] Plot IoU graphs
-- [ ] Figure out the limitations
