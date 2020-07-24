@@ -92,3 +92,24 @@ python3 main.py -pp ../../Dataset/Inria_Patches/inria_dataset_256/train/ -t True
 <p align="center">
   <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/fcn_training.png" title="FCN" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/segnet_training.png" title="SegNet" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/unet_training.png" title="U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/deepunet_training.png" title="Deep U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/pspnet_training.png" title="PSPNet" width="400">
 </p>
+
+# Results  
+### Without Augmentations
+| Places   | FCN  | SegNet | U-Net | Deep U-Net | PSPNet | 
+|:-------|:-----:|:-------:|:-------:|:-------:|:-------:|
+|  Austin  |  0.43 |  0.52   |   **0.55**  |   0.52    |  0.53 | 
+|  Chicago  |  0.59 |  0.60   |   **0.73**  |   0.62    | 0.65 | 
+|  Kitsap  |  0.23  |  0.29  |  **0.37**  |  0.41  |  0.44  |
+|  Tyrol  |  0.19  |  0.26  |  0.31  |  0.29  |  **0.43**  |
+|  Vienna  |  0.51  |  0.48  |  **0.77**  |  0.73  |  0.63  |
+
+### After Augmentations
+| Places   | FCN  | SegNet | U-Net | Deep U-Net | PSPNet | 
+|:-------|:-----:|:-------:|:-------:|:-------:|:-------:|
+|  Austin  |  0.54 |  0.57   |   **0.69**  |   0.63    |  0.60 | 
+|  Chicago  |  0.63 |  0.63   |   **0.79**  |   0.67    | 0.67 | 
+|  Kitsap  |  0.44  |  0.51  |  **0.59**  |  0.58  |  0.53  |
+|  Tyrol  |  0.54  |  0.56  |  **0.70**  |  0.69  |  0.60  |
+|  Vienna  |  0.68  |  0.72  |  **0.80**  |  0.77  |  0.68  |
+
+
