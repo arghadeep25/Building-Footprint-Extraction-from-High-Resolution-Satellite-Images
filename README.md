@@ -1,4 +1,4 @@
-# Building Detection from High Resolution Satellite Images using CNN
+# Building Detection from High Resolution Satellite Images
 
 <p align="center">
   <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample.png" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/results/sample_result.png" width="400">
@@ -7,11 +7,11 @@
 Implementation of Fully Convolutional Network, U-Net, Deep Residual U-Net, Pyramid Scene Parsing Network and Deep Structured Active Contour.
 
 ## Papers  
-Fully Convolutional Network Paper: https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf  
-SegNet Paper: https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7803544  
-U-Net Paper: https://arxiv.org/pdf/1505.04597.pdf  
-Deep UNet or Residual UNet Paper: https://arxiv.org/pdf/1711.10684.pdf  
-PSPNet Paper: https://arxiv.org/pdf/1612.01105.pdf  
+Fully Convolutional Network Paper: [Link](https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf)  
+SegNet Paper: [Link](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7803544)  
+U-Net Paper: [Link](https://arxiv.org/pdf/1505.04597.pdf)  
+Deep UNet or Residual UNet Paper: [Link](https://arxiv.org/pdf/1711.10684.pdf)  
+PSPNet Paper: [Link](https://arxiv.org/pdf/1612.01105.pdf)  
 
 ## Architectures
 <p align="center">
@@ -44,15 +44,34 @@ The datasets used in this project can be downloaded from the following links
 </p> 
 
 ### [WHU Building Dataset](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html):  
+#### WHU East Asia Dataset:  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/whu_east_asia/whu_east_asia.png" width="800">
+</p>  
 
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/whu_east_asia/whu_east_asia_patches.png" width="800">
+</p>  
 
+#### WHU New Zealand:  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/nzlnd/whu_nz.png" width="800">
+</p>  
+
+#### WHU Global Cities:  
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/datasets/whu_sample/whu_global_cities.png" width="800">
+</p>  
 
 # Requirements  
-> OpenCV  
-> Matplotlib  
-> Scikit Images  
-> Keras  
-> Tensorflow  
+- ['OpenCV-Python'](https://pypi.org/project/opencv-python/)  
+- [Matplotlib](https://pypi.org/project/matplotlib/)  
+- [Numpy](https://pypi.org/project/numpy/)  
+- [Scikit Images](https://scikit-image.org/docs/dev/install.html)  
+- [Keras](https://pypi.org/project/Keras/)  
+- [Tensorflow](https://www.tensorflow.org/install/pip)  
+- [GDAL](https://pypi.org/project/GDAL/)  
+- [PyCOCOTools](https://pypi.org/project/pycocotools/)  
 
 # Usage  
 ## Help  
@@ -69,19 +88,28 @@ python3 main.py -sd True -imp ../../Dataset/Inria_Dataset/train/ -od ../../Datas
 ```console  
 python3 main.py -pp ../../Dataset/Inria_Patches/inria_dataset_256/train/ -t True -m unet
 ```  
+### Training Plots
+<p align="center">
+  <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/fcn_training.png" title="FCN" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/segnet_training.png" title="SegNet" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/unet_training.png" title="U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/deepunet_training.png" title="Deep U-Net" width="400"> <img src="https://github.com/arghadeep25/Segmentation/blob/master/training_plots/pspnet_training.png" title="PSPNet" width="400">
+</p>
+
+# Results  
+### Without Augmentations
+| Places   | FCN  | SegNet | U-Net | Deep U-Net | PSPNet | 
+|:-------|:-----:|:-------:|:-------:|:-------:|:-------:|
+|  Austin  |  0.43 |  0.52   |   **0.55**  |   0.52    |  0.53 | 
+|  Chicago  |  0.59 |  0.60   |   **0.73**  |   0.62    | 0.65 | 
+|  Kitsap  |  0.23  |  0.29  |  **0.37**  |  0.41  |  0.44  |
+|  Tyrol  |  0.19  |  0.26  |  0.31  |  0.29  |  **0.43**  |
+|  Vienna  |  0.51  |  0.48  |  **0.77**  |  0.73  |  0.63  |
+
+### After Augmentations
+| Places   | FCN  | SegNet | U-Net | Deep U-Net | PSPNet | 
+|:-------|:-----:|:-------:|:-------:|:-------:|:-------:|
+|  Austin  |  0.54 |  0.57   |   **0.69**  |   0.63    |  0.60 | 
+|  Chicago  |  0.63 |  0.63   |   **0.79**  |   0.67    | 0.67 | 
+|  Kitsap  |  0.44  |  0.51  |  **0.59**  |  0.58  |  0.53  |
+|  Tyrol  |  0.54  |  0.56  |  **0.70**  |  0.69  |  0.60  |
+|  Vienna  |  0.68  |  0.72  |  **0.80**  |  0.77  |  0.68  |
 
 
-# To Do
-- [x] Split images into patches 250x250
-- [x] Split images into patches 500x500
-- [x] Implement FCN
-- [x] Implement UNet
-- [x] Implement Deep UNet
-- [ ] Implement PSPNet
-- [ ] Implement DSAC
-- [x] Train on small dataset
-- [ ] Train on large dataset
-- [ ] Test all the trained models
-- [ ] Plot graphs on Tensorboard
-- [ ] Plot IoU graphs
-- [ ] Figure out the limitations
